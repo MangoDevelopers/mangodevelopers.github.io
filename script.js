@@ -11,15 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
         { text: '> pwd', type: 'command', delayAfter: 500 },
         { text: '\n/home/mango_developers\n', type: 'output', delayAfter: 200 },
         { text: '> cat README.md', type: 'command', delayAfter: 500 },
-        { text: '\n---\n', type: 'output', delayAfter: 150 },
+        { text: '\n------------------------------\n', type: 'output', delayAfter: 150 },
         { text: '# Welcome to Mango Developers!\n', type: 'output', delayAfter: 150 },
-        { text: '\nWe are a passionate group of software developers creating awesome stuff.\n', type: 'output', delayAfter: 150 },
-        { text: 'We love clean code, collaboration, and of course, the mango feeling!\n', type: 'output', delayAfter: 150 },
+        { text: 'We are a passionate group of software developers creating awesome stuff.\n', type: 'output', delayAfter: 150 },
+        { text: 'We love coding, collaboration, and of course, the mango feeling!\n', type: 'output', delayAfter: 150 },
         { text: '\nFind our work and connect with us via the links below.\n', type: 'output', delayAfter: 150 },
-        { text: '---\n', type: 'output', delayAfter: 500 },
+        { text: '------------------------------\n', type: 'output', delayAfter: 500 },
         { text: '> echo $WHAT_IS_MANGO', type: 'command', delayAfter: 500 },
-        { text: '\n# What is Mango?\n', type: 'output', delayAfter: 150 },
-        { text: 'A sweet feeling that cannot be expressed but can still be shared with everyone.\n', type: 'output', delayAfter: 1000 }, // Longer pause at the end
+        { text: '\nWhat is Mango?\n', type: 'output', delayAfter: 150 },
+        { text: 'A sweet feeling that cannot be expressed in words,\nbut can still be shared with everyone.\n', type: 'output', delayAfter: 1000 }, // Longer pause at the end
         { text: '> ', type: 'command', delayAfter: 0 } // Final prompt
     ];
     // ------------------------------------
