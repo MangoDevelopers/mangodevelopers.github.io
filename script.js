@@ -6,14 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Use spans with classes for potential coloring (optional, but nice)
     // Use \n for new lines
     const lines = [
-        { text: '$ whoami', type: 'command', delayAfter: 500 },
+        { text: '\n$ whoami', type: 'command', delayAfter: 500 },
         { text: '\nmango_developer\n', type: 'output', delayAfter: 200 },
         { text: '$ pwd', type: 'command', delayAfter: 500 },
         { text: '\n/home/mango_developers\n', type: 'output', delayAfter: 200 },
-        { text: '$ ls -l', type: 'command', delayAfter: 500 },
-        { text: '\ntotal 4\n', type: 'output', delayAfter: 150 },
-        { text: 'drwxr-xr-x 2 mango_dev users 4096 Apr 1 17:56 projects\n', type: 'output', delayAfter: 150 },
-        { text: '-rw-r--r-- 1 mango_dev users  120 Apr 1 17:56 README.md\n', type: 'output', delayAfter: 300 },
         { text: '$ cat README.md', type: 'command', delayAfter: 500 },
         { text: '\n---\n', type: 'output', delayAfter: 150 },
         { text: '# Welcome to Mango Developers!\n', type: 'output', delayAfter: 150 },
