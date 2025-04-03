@@ -1,46 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mango Developers</title>
-    <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/bd-coming-soon.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-
-<body class="min-vh-100 d-flex flex-column">
-
-    <header>
-        <div class="container">
-            <nav class="navbar navbar-dark bg-transparenet">
-                <a class="navbar-brand" href="#">
-                    <!--img src="assets/images/mangodevelopers-logo.png" alt="logo"-->
-                </a>
-                <!--span class="navbar-text ml-auto d-none d-sm-inline-block">978-130-5444 </span-->
-                <span class="navbar-text d-none d-sm-inline-block">admin@mangodevelopers.com</span>
-            </nav>
+<body>
+    <div class="container">
+        <div class="shell-container">
+            <div class="shell-header">
+                <span class="button red"></span>
+                <span class="button yellow"></span>
+                <span class="button green"></span>
+                <span class="shell-title">bash -- Mango Developers</span>
+            </div>
+            <div class="shell-body">
+                <pre id="shell-output"></pre><span class="cursor">_</span>
+            </div>
         </div>
-    </header>
-    <main class="my-auto">
-        <div class="container">
-            <h1 class="page-title">We're coming soon</h1>
-            <p class="page-description">
-                We are Mango Developers.
-                What's mango?
-                A sweet feeling that cannot be expressed but can still be shared with everyone. #mangodevs 
-            </p>
-            <p>Stay connected</p>
-            <nav class="footer-social-links">
-                <a href="https://github.com/mangodevelopers" class="social-link"><i class="mdi mdi-github"></i></a>
-                <a href="#!" class="social-link"><i class="mdi mdi-twitter"></i></a>
-                <a href="#!" class="social-link"><i class="mdi mdi-google"></i></a>
-            </nav>
-        </div>
-    </main>
+
+        <div class="social-links">
+            <a href="https://github.com/mangodevelopers" target="_blank" aria-label="GitHub" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://instagram.com/mangodevs" target="_blank" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/mangodevs" target="_blank" aria-label="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
-
 </html>

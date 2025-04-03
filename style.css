@@ -1,0 +1,158 @@
+/* Basic Reset & Dark Theme */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    background-color: #1e1e1e; /* Dark background */
+    color: #d4d4d4; /* Light text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 700px; /* Max width for the shell */
+}
+
+/* Shell Styling */
+.shell-container {
+    background-color: #2d2d2d; /* Slightly lighter dark shade */
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.shell-header {
+    background-color: #3c3c3c; /* Header bar color */
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    position: relative; /* For positioning title */
+}
+
+.shell-header .button {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.shell-header .red { background-color: #ff5f57; }
+.shell-header .yellow { background-color: #ffbd2e; }
+.shell-header .green { background-color: #28c940; }
+
+.shell-title {
+    color: #cccccc;
+    font-size: 0.9em;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+
+.shell-body {
+    padding: 15px;
+    min-height: 250px; /* Give it some initial height */
+    font-size: 1em; /* Adjust as needed */
+    line-height: 1.6;
+    color: #4CAF50; /* Classic terminal green */
+    white-space: pre-wrap; /* Allows wrapping text but preserves spaces */
+    word-wrap: break-word; /* Break long words */
+    position: relative; /* Needed for absolute cursor positioning if used differently */
+}
+
+#shell-output {
+    display: inline; /* Keep text and cursor on the same line flow */
+}
+
+/* Blinking Cursor */
+.cursor {
+    display: inline-block;
+    background-color: #4CAF50; /* Cursor color */
+    width: 10px; /* Cursor width */
+    height: 1.2em; /* Match line height */
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to { background-color: transparent; }
+    50% { background-color: #4CAF50; } /* Cursor color */
+}
+
+/* Prompt Symbol Styling (if used in JS text) */
+.prompt {
+    color: #57a6fd; /* Blueish color for prompt */
+}
+
+.command {
+    color: #d4d4d4; /* White/light gray for commands */
+}
+
+.output {
+     color: #4CAF50; /* Green for output */
+}
+
+
+/* Social Links Styling */
+.social-links {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px; /* Space between icons */
+}
+
+.social-links a {
+    color: #a0a0a0; /* Muted gray for icons */
+    font-size: 1.8em; /* Icon size */
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #ffffff; /* White on hover */
+    transform: scale(1.1); /* Slight scale effect */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .shell-body {
+        font-size: 0.9em;
+        min-height: 200px;
+    }
+    .shell-title {
+        font-size: 0.8em;
+    }
+    .social-links a {
+        font-size: 1.6em;
+    }
+}
+
+@media (max-width: 400px) {
+    .shell-body {
+        font-size: 0.8em;
+    }
+     .shell-title {
+       display: none; /* Hide title on very small screens */
+    }
+     .social-links {
+        gap: 15px;
+    }
+    .social-links a {
+        font-size: 1.5em;
+    }
+}
