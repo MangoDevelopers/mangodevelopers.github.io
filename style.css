@@ -69,7 +69,7 @@ body {
     min-height: 250px; /* Give it some initial height */
     font-size: 1em; /* Adjust as needed */
     line-height: 1.6;
-    color: #4CAF50; /* Classic terminal green */
+    color: #40E0D0; /* Turquoise text */
     white-space: pre-wrap; /* Allows wrapping text but preserves spaces */
     word-wrap: break-word; /* Break long words */
     position: relative; /* Needed for absolute cursor positioning if used differently */
@@ -82,7 +82,7 @@ body {
 /* Blinking Cursor */
 .cursor {
     display: inline-block;
-    background-color: #4CAF50; /* Cursor color */
+    background-color: #40E0D0; /* Cursor color */
     width: 10px; /* Cursor width */
     height: 1.2em; /* Match line height */
     margin-left: 2px;
@@ -92,7 +92,7 @@ body {
 
 @keyframes blink {
     from, to { background-color: transparent; }
-    50% { background-color: #4CAF50; } /* Cursor color */
+    50% { background-color: #40E0D0; } /* Cursor color */
 }
 
 /* Prompt Symbol Styling (if used in JS text) */
@@ -105,7 +105,7 @@ body {
 }
 
 .output {
-     color: #4CAF50; /* Green for output */
+     color: #40E0D0; /* Turquoise for output */
 }
 
 

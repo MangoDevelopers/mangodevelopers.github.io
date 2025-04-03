@@ -6,20 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Use spans with classes for potential coloring (optional, but nice)
     // Use \n for new lines
     const lines = [
-        { text: '\n$ whoami', type: 'command', delayAfter: 500 },
-        { text: '\nmango_developer\n', type: 'output', delayAfter: 200 },
-        { text: '$ pwd', type: 'command', delayAfter: 500 },
+        { text: '\n> whoami', type: 'command', delayAfter: 500 },
+        { text: '\nmango_developers\n', type: 'output', delayAfter: 200 },
+        { text: '> pwd', type: 'command', delayAfter: 500 },
         { text: '\n/home/mango_developers\n', type: 'output', delayAfter: 200 },
-        { text: '$ cat README.md', type: 'command', delayAfter: 500 },
+        { text: '> cat README.md', type: 'command', delayAfter: 500 },
         { text: '\n---\n', type: 'output', delayAfter: 150 },
         { text: '# Welcome to Mango Developers!\n', type: 'output', delayAfter: 150 },
         { text: '\nWe are a passionate group of software developers creating awesome stuff.\n', type: 'output', delayAfter: 150 },
-        { text: 'We love clean code, collaboration, and of course, mangoes!\n', type: 'output', delayAfter: 150 },
+        { text: 'We love clean code, collaboration, and of course, the mango feeling!\n', type: 'output', delayAfter: 150 },
         { text: '\nFind our work and connect with us via the links below.\n', type: 'output', delayAfter: 150 },
         { text: '---\n', type: 'output', delayAfter: 500 },
-        { text: '$ echo "Happy Coding!"', type: 'command', delayAfter: 500 },
-        { text: '\nHappy Coding!\n', type: 'output', delayAfter: 1000 }, // Longer pause at the end
-        { text: '$ ', type: 'command', delayAfter: 0 } // Final prompt
+        { text: '> echo $WHAT_IS_MANGO', type: 'command', delayAfter: 500 },
+        { text: '\n# What is Mango?\n', type: 'output', delayAfter: 150 },
+        { text: 'A sweet feeling that cannot be expressed but can still be shared with everyone.\n', type: 'output', delayAfter: 1000 }, // Longer pause at the end
+        { text: '> ', type: 'command', delayAfter: 0 } // Final prompt
     ];
     // ------------------------------------
 
