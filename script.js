@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const shellOutput = document.getElementById('shell-output');
     const cursor = document.querySelector('.cursor');
-
+    const body = document.body; // Keep body reference
     // --- Text Content for the Shell ---
     // Use spans with classes for potential coloring (optional, but nice)
     // Use \n for new lines
@@ -46,9 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // span.textContent = textToType[charIndex];
         // shellOutput.appendChild(span);
 
-        // Simpler version without span for color:
-        shellOutput.textContent += textToType[charIndex];
-
+        // Insert character *before* the cursor span
+        const char = textToType[charIndex];
+        const textNode = document.createTextNode(char);
+        shellOutput.insertBefore(textNode, cursor);
 
         charIndex++;
 
@@ -74,6 +75,74 @@ document.addEventListener('DOMContentLoaded', () => {
        cursor.style.animation = 'none'; // Stop blinking during typing
        typeCharacter();
     }, 1000); // 1 second delay before starting
+
+
+    // --- Theme Toggle Logic (from web.dev, adapted) ---
+    const storageKey = 'theme-preference';
+
+    const onClick = () => {
+      // flip current value
+      theme.value = theme.value === 'light' ? 'dark' : 'light';
+      setPreference();
+    }
+
+    const getColorPreference = () => {
+      const storedPref = localStorage.getItem(storageKey);
+      if (storedPref) {
+        return storedPref;
+      }
+      // Use matchMedia to check system preference
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    const setPreference = () => {
+      localStorage.setItem(storageKey, theme.value);
+      reflectPreference();
+    }
+
+    const reflectPreference = () => {
+      // Toggle class on body instead of setting data-theme on html
+      body.classList.toggle('light-theme', theme.value === 'light');
+
+      // Update the button's aria-label
+      document
+        .querySelector('#theme-toggle')
+        ?.setAttribute('aria-label', theme.value);
+
+      // Re-initialize particles with new theme colors
+      // Ensure init() exists and is accessible in this scope
+      if (typeof init === 'function') {
+          init();
+      } else {
+          console.error("Particle init() function not found for theme change.");
+      }
+    }
+
+    // Initialize theme object
+    const theme = {
+      value: getColorPreference(),
+    };
+
+    // Set initial theme state early
+    reflectPreference();
+
+    // Add event listeners after DOM is fully loaded
+    // The 'DOMContentLoaded' listener ensures this runs correctly
+    const themeToggleButton = document.querySelector('#theme-toggle');
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', onClick);
+    } else {
+        console.error("Theme toggle button #theme-toggle not found.");
+    }
+
+    // Sync with system changes
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', ({ matches: isDark }) => {
+        theme.value = isDark ? 'dark' : 'light';
+        setPreference();
+      });
+    // --- End Theme Toggle Logic ---
 
 });
 
@@ -178,9 +247,12 @@ function init() {
     let numberOfParticles = (canvas.height * canvas.width) / 9000; // Adjust density
     for (let i = 0; i < numberOfParticles; i++) {
         let size = (Math.random() * 2) + 1; // Particle size
-        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-        let color = 'rgba(173, 216, 230, 0.6)'; // Light blue with transparency
+        let x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2); // Use canvas.width/height
+        let y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
+        // Get color from CSS variable
+        const computedStyle = getComputedStyle(document.documentElement);
+        // Use the CSS variable directly. The fallback is less critical if CSS is set up correctly.
+        let color = computedStyle.getPropertyValue('--particle-color').trim();
         let weight = (Math.random() * 1.5) + 0.5; // Random weight for varied movement
         particlesArray.push(new Particle(x, y, size, color, weight));
     }
@@ -208,12 +280,23 @@ function connect() {
                 opacityValue = 1 - (distance/20000); // Fade lines with distance
                 if (opacityValue < 0) opacityValue = 0; // Clamp opacity
                 if (opacityValue > 0.3) opacityValue = 0.3; // Max opacity for lines
-                ctx.strokeStyle = 'rgba(173, 216, 230, ' + opacityValue + ')'; // Light blue lines
+                // Get line color from CSS variable
+                const computedStyle = getComputedStyle(document.documentElement);
+                let baseLineColor = computedStyle.getPropertyValue('--particle-line-color').trim();
+
+                // Set the stroke style directly using the color (including alpha) from the CSS variable.
+                // The calculated opacityValue (distance fade) is already factored in above.
+                // We will apply the calculated opacityValue by setting globalAlpha temporarily.
+                // This avoids complex color string parsing.
+                ctx.save(); // Save current context state
+                ctx.globalAlpha = opacityValue; // Apply distance-based opacity fade
+                ctx.strokeStyle = baseLineColor;
                 ctx.lineWidth = 0.5;
                 ctx.beginPath();
                 ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
                 ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
                 ctx.stroke();
+                ctx.restore(); // Restore context state (including globalAlpha)
             }
         }
     }

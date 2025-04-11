@@ -1,3 +1,5 @@
+@import "https://unpkg.com/open-props/easings.min.css";
+
 /* Basic Reset & Dark Theme */
 * {
     margin: 0;
@@ -80,14 +82,15 @@ body {
 }
 
 #shell-output {
-    display: inline; /* Keep text and cursor on the same line flow */
+    /* display: inline; */ /* Removed: Keep text and cursor on the same line flow - This was preventing wrapping */
+    /* Let it default to block or pre's default display */
 }
 
 /* Blinking Cursor */
 .cursor {
     display: inline-block;
     background-color: #40E0D0; /* Cursor color */
-    width: 10px; /* Cursor width */
+    width: 8px; /* Cursor width */
     height: 1.2em; /* Match line height */
     margin-left: 2px;
     vertical-align: text-bottom;
@@ -113,11 +116,35 @@ body {
 }
 
 
+/* Controls Container (Theme + Social Links) */
+.controls-container {
+    display: flex;
+    justify-content: center; /* Center the group */
+    align-items: center;
+    gap: 30px; /* Space between theme control and social links */
+    margin-top: 20px; /* Space above the controls */
+    width: 100%; /* Ensure it takes width for centering */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+/* Theme Control (Button + Label) */
+.theme-control {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between button and label */
+}
+
+.theme-label-text {
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+
 /* Social Links Styling */
 .social-links {
-    margin-top: 20px;
+    /* margin-top: 20px; Removed, handled by controls-container */
     display: flex;
     gap: 20px; /* Space between icons */
+    align-items: center; /* Align icons vertically */
 }
 
 .social-links a {
@@ -130,6 +157,11 @@ body {
 .social-links a:hover {
     color: #ffffff; /* White on hover */
     transform: scale(1.1); /* Slight scale effect */
+}
+
+.social-links-label {
+  font-size: 0.9em;
+  color: var(--text-color);
 }
 
 /* Responsive Adjustments */
@@ -160,6 +192,211 @@ body {
         font-size: 1.5em;
     }
 }
+
+
+/* --- Theme Toggle Button (web.dev) --- */
+.theme-toggle {
+  /* Basic button reset/styling */
+  background: none;
+  border: none;
+  padding: 0;
+  /* margin: 0 auto; Removed, positioning handled by flex parent */
+  /* margin-bottom: 20px; Removed, positioning handled by flex parent */
+  cursor: pointer;
+  color: inherit; /* Inherit color from body */
+  inline-size: 2rem; /* Size of the button */
+  block-size: 2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex; /* Center the SVG */
+  justify-content: center;
+  align-items: center;
+
+  /* Optional: Add focus ring */
+  outline-offset: 5px;
+}
+
+.theme-toggle > svg {
+  inline-size: 100%;
+  block-size: 100%;
+  stroke-linecap: round;
+}
+
+.sun-and-moon > :is(.moon, .sun, .sun-beams) {
+  transform-origin: center;
+}
+
+.sun-and-moon > :is(.moon, .sun) {
+  fill: var(--icon-fill);
+}
+
+.theme-toggle:is(:hover, :focus-visible) > .sun-and-moon > :is(.moon, .sun) {
+  fill: var(--icon-fill-hover);
+}
+
+.sun-and-moon > .sun-beams {
+  stroke: var(--icon-fill);
+  stroke-width: 2px;
+}
+
+.theme-toggle:is(:hover, :focus-visible) .sun-and-moon > .sun-beams {
+  stroke: var(--icon-fill-hover);
+}
+
+/* Dark Theme State Styles (body:not(.light-theme)) */
+body:not(.light-theme) .sun-and-moon > .sun {
+  transform: scale(1.75);
+}
+
+body:not(.light-theme) .sun-and-moon > .sun-beams {
+  opacity: 0;
+}
+
+body:not(.light-theme) .sun-and-moon > .moon > circle {
+  transform: translateX(-7px);
+}
+
+@supports (cx: 1) {
+  body:not(.light-theme) .sun-and-moon > .moon > circle {
+    /* Using cx is better for animation */
+    cx: 17;
+    transform: translateX(0);
+  }
+}
+
+/* Animations */
+@media (prefers-reduced-motion: no-preference) {
+  .sun-and-moon > .sun {
+    transition: transform .5s var(--ease-elastic-3);
+  }
+
+  .sun-and-moon > .sun-beams {
+    transition: transform .5s var(--ease-elastic-4), opacity .5s var(--ease-3);
+  }
+
+  .sun-and-moon .moon > circle {
+    transition: transform .25s var(--ease-out-5);
+  }
+
+  @supports (cx: 1) {
+    .sun-and-moon .moon > circle {
+      transition: cx .25s var(--ease-out-5);
+    }
+  }
+
+  /* Dark theme transition overrides */
+  body:not(.light-theme) .sun-and-moon > .sun {
+    transition-timing-function: var(--ease-3);
+    transition-duration: .25s;
+    transform: scale(1.75); /* Explicitly state end value */
+  }
+
+  body:not(.light-theme) .sun-and-moon > .sun-beams {
+    transition-duration: .15s;
+    transform: rotateZ(-25deg); /* Explicitly state end value */
+  }
+
+  body:not(.light-theme) .sun-and-moon > .moon > circle {
+    transition-duration: .5s;
+    transition-delay: .25s;
+  }
+}
+/* --- End Theme Toggle Button --- */
+
+
+/* --- Light Theme Variables & Styles --- */
+:root {
+    /* Default: Dark Theme Variables */
+    --bg-color: #1e1e1e;
+    --text-color: #d4d4d4;
+    --shell-bg: #2d2d2d;
+    --shell-header-bg: #3c3c3c;
+    --shell-title-color: #cccccc;
+    --shell-body-color: #40E0D0; /* Turquoise */
+    --cursor-color: #40E0D0;
+    --prompt-color: #57a6fd;
+    --command-color: #d4d4d4;
+    --social-link-color: #a0a0a0;
+    --social-link-hover-color: #ffffff;
+    --particle-color: rgba(173, 216, 230, 0.6); /* Light blue */
+    --particle-line-color: rgba(173, 216, 230, 0.3);
+    /* Icon colors for dark theme */
+    --icon-fill: #d4d4d4; /* Match text color */
+    --icon-fill-hover: #ffffff; /* Match social link hover */
+}
+
+body.light-theme {
+    /* Light Theme Overrides */
+    --bg-color: #f4f4f4;
+    --text-color: #333333;
+    --shell-bg: #ffffff;
+    --shell-header-bg: #e0e0e0;
+    --shell-title-color: #555555;
+    --shell-body-color: #008080; /* Teal */
+    --cursor-color: #008080;
+    --prompt-color: #007bff;
+    --command-color: #333333;
+    --social-link-color: #555555;
+    --social-link-hover-color: #000000;
+    /* Inverted particle colors for light theme */
+    --particle-color: rgba(45, 45, 45, 0.6); /* Dark grey/black particles */
+    --particle-line-color: rgba(45, 45, 45, 0.3); /* Dark grey/black lines */
+    /* Icon colors for light theme */
+    --icon-fill: #333333; /* Match text color */
+    --icon-fill-hover: #000000; /* Match social link hover */
+}
+
+/* Apply variables */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.shell-container {
+    background-color: var(--shell-bg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Adjust shadow for light theme */
+}
+
+.shell-header {
+    background-color: var(--shell-header-bg);
+}
+
+.shell-title {
+    color: var(--shell-title-color);
+}
+
+.shell-body {
+    color: var(--shell-body-color);
+}
+
+.cursor {
+    background-color: var(--cursor-color);
+    /* Update blink animation color */
+}
+
+@keyframes blink {
+    from, to { background-color: transparent; }
+    50% { background-color: var(--cursor-color); }
+}
+
+/* Update prompt/command/output colors if using spans (currently commented out in JS) */
+.prompt { color: var(--prompt-color); }
+.command { color: var(--command-color); }
+.output { color: var(--shell-body-color); } /* Match shell body color */
+
+.social-links a {
+    color: var(--social-link-color);
+}
+
+.social-links a:hover {
+    color: var(--social-link-hover-color);
+}
+
+/* Removed old toggle switch color updates */
+
+/* Update particle colors (will need JS adjustment too) */
+/* Particle color update needs JS adjustment as color is set directly there */
+
 
 /* Particle Canvas Styling */
 #particle-canvas {
