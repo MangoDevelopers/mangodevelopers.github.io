@@ -153,9 +153,9 @@ class Particle {
             this.x -= repulsionX;
             this.y -= repulsionY;
 
-             // Slightly dampen inherent velocity when repelled to prevent excessive speed
-             this.directionX *= 0.98;
-             this.directionY *= 0.98;
+            // Slightly dampen inherent velocity when repelled to prevent excessive speed
+            //  this.directionX *= 0.98;
+            //  this.directionY *= 0.98;
 
         }
         // --- End Mouse Interaction ---
