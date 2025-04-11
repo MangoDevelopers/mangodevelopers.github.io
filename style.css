@@ -7,13 +7,16 @@
 
 body {
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    background-color: #1e1e1e; /* Dark background */
+    /* Animated background using CSS variables updated by JS */
+    background: radial-gradient(circle at calc(var(--mouse-x, 50%) * 1px) calc(var(--mouse-y, 50%) * 1px), #4a4a6a, #1e1e1e 60%);
     color: #d4d4d4; /* Light text */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    overflow: hidden; /* Prevent scrollbars from gradient */
+    transition: background 0.1s ease-out; /* Smooth transition for background */
 }
 
 .container {

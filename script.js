@@ -76,3 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000); // 1 second delay before starting
 
 });
+
+// --- Background Animation ---
+document.addEventListener('mousemove', (e) => {
+    document.body.style.setProperty('--mouse-x', e.clientX);
+    document.body.style.setProperty('--mouse-y', e.clientY);
+});
