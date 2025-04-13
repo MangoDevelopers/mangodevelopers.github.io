@@ -19,7 +19,7 @@ To view the website locally, simply open the `index.html` file in your web brows
 
 ## Contributing
 
-Please refer to the `CONTRIBUTING.md` file for details on how to contribute to this project. (Note: This file doesn't exist yet, but it's good practice to mention it).
+Please refer to the `CONTRIBUTING.md` file for details on how to contribute to this project.
 
 ## Owners
 
