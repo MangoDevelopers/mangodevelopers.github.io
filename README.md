@@ -1,2 +1,2 @@
-# landing-page
+# Home page
 Initial Landing Page
