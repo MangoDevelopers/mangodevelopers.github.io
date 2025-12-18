@@ -304,11 +304,16 @@ function connect() {
 
 
 // Resize event
+// Resize event
+let resizeTimeout;
 window.addEventListener('resize', () => {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-    mouse.radius = ((canvas.height/80) * (canvas.height/80)); // Adjust interaction radius on resize
-    init(); // Reinitialize particles on resize
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        mouse.radius = ((canvas.height/80) * (canvas.height/80)); // Adjust interaction radius on resize
+        init(); // Reinitialize particles on resize
+    }, 100);
 });
 
 // Reset mouse position when mouse leaves window

@@ -2,161 +2,217 @@
 
 /* Basic Reset & Dark Theme */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    /* Particle canvas will be the background */
-    background-color: #1e1e1e; /* Solid dark background */
-    color: #d4d4d4; /* Light text */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    overflow: hidden; /* Prevent scrollbars */
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  /* Particle canvas will be the background */
+  background-color: #1e1e1e;
+  /* Solid dark background */
+  color: #d4d4d4;
+  /* Light text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-y: auto;
+  /* Allow scrolling */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll */
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 700px; /* Max width for the shell */
-    position: relative; /* Ensure it's above the fixed canvas */
-    z-index: 1; /* Ensure it's above the fixed canvas */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  /* Max width for the shell */
+  position: relative;
+  /* Ensure it's above the fixed canvas */
+  z-index: 1;
+  /* Ensure it's above the fixed canvas */
 }
 
 /* Shell Styling */
 .shell-container {
-    background-color: #2d2d2d; /* Slightly lighter dark shade */
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    width: 100%;
-    margin-bottom: 30px;
+  background-color: #2d2d2d;
+  /* Slightly lighter dark shade */
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 30px;
 }
 
 .shell-header {
-    background-color: #3c3c3c; /* Header bar color */
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    position: relative; /* For positioning title */
+  background-color: #3c3c3c;
+  /* Header bar color */
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  /* For positioning title */
 }
 
 .shell-header .button {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 8px;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
 }
 
-.shell-header .red { background-color: #ff5f57; }
-.shell-header .yellow { background-color: #ffbd2e; }
-.shell-header .green { background-color: #28c940; }
+.shell-header .red {
+  background-color: #ff5f57;
+}
+
+.shell-header .yellow {
+  background-color: #ffbd2e;
+}
+
+.shell-header .green {
+  background-color: #28c940;
+}
 
 .shell-title {
-    color: #cccccc;
-    font-size: 0.9em;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
+  color: #cccccc;
+  font-size: 0.9em;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 
 .shell-body {
-    padding: 15px;
-    min-height: 250px; /* Give it some initial height */
-    font-size: 1em; /* Adjust as needed */
-    line-height: 1.6;
-    color: #40E0D0; /* Turquoise text */
-    white-space: pre-wrap; /* Allows wrapping text but preserves spaces */
-    word-wrap: break-word; /* Break long words */
-    position: relative; /* Needed for absolute cursor positioning if used differently */
+  padding: 15px;
+  min-height: 250px;
+  /* Give it some initial height */
+  font-size: 1em;
+  /* Adjust as needed */
+  line-height: 1.6;
+  color: #40E0D0;
+  /* Turquoise text */
+  white-space: pre-wrap;
+  /* Allows wrapping text but preserves spaces */
+  word-wrap: break-word;
+  /* Break long words */
+  position: relative;
+  /* Needed for absolute cursor positioning if used differently */
 }
 
 #shell-output {
-    /* display: inline; */ /* Removed: Keep text and cursor on the same line flow - This was preventing wrapping */
-    /* Let it default to block or pre's default display */
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
+
 
 /* Blinking Cursor */
 .cursor {
-    display: inline-block;
-    background-color: #40E0D0; /* Cursor color */
-    width: 8px; /* Cursor width */
-    height: 1.2em; /* Match line height */
-    margin-left: 2px;
-    vertical-align: text-bottom;
-    animation: blink 1s step-end infinite;
+  display: inline-block;
+  background-color: #40E0D0;
+  /* Cursor color */
+  width: 8px;
+  /* Cursor width */
+  height: 1.2em;
+  /* Match line height */
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
-    from, to { background-color: transparent; }
-    50% { background-color: #40E0D0; } /* Cursor color */
+
+  from,
+  to {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: #40E0D0;
+  }
+
+  /* Cursor color */
 }
 
 /* Prompt Symbol Styling (if used in JS text) */
 .prompt {
-    color: #57a6fd; /* Blueish color for prompt */
+  color: #57a6fd;
+  /* Blueish color for prompt */
 }
 
 .command {
-    color: #d4d4d4; /* White/light gray for commands */
+  color: #d4d4d4;
+  /* White/light gray for commands */
 }
 
 .output {
-     color: #40E0D0; /* Turquoise for output */
+  color: #40E0D0;
+  /* Turquoise for output */
 }
 
 
 /* Controls Container (Theme + Social Links) */
 .controls-container {
-    display: flex;
-    justify-content: center; /* Center the group */
-    align-items: center;
-    gap: 30px; /* Space between theme control and social links */
-    margin-top: 20px; /* Space above the controls */
-    width: 100%; /* Ensure it takes width for centering */
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  display: flex;
+  justify-content: center;
+  /* Center the group */
+  align-items: center;
+  gap: 30px;
+  /* Space between theme control and social links */
+  margin-top: 20px;
+  /* Space above the controls */
+  width: 100%;
+  /* Ensure it takes width for centering */
+  flex-wrap: wrap;
+  /* Allow wrapping on smaller screens */
 }
 
 /* Theme Control (Button + Label) */
 .theme-control {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Space between button and label */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Space between button and label */
 }
 
 .theme-label-text {
-    font-size: 0.9em;
-    color: var(--text-color);
+  font-size: 0.9em;
+  color: var(--text-color);
 }
 
 /* Social Links Styling */
 .social-links {
-    /* margin-top: 20px; Removed, handled by controls-container */
-    display: flex;
-    gap: 20px; /* Space between icons */
-    align-items: center; /* Align icons vertically */
+  /* margin-top: 20px; Removed, handled by controls-container */
+  display: flex;
+  gap: 20px;
+  /* Space between icons */
+  align-items: center;
+  /* Align icons vertically */
 }
 
 .social-links a {
-    color: #a0a0a0; /* Muted gray for icons */
-    font-size: 1.8em; /* Icon size */
-    text-decoration: none;
-    transition: color 0.3s ease, transform 0.3s ease;
+  color: #a0a0a0;
+  /* Muted gray for icons */
+  font-size: 1.8em;
+  /* Icon size */
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .social-links a:hover {
-    color: #ffffff; /* White on hover */
-    transform: scale(1.1); /* Slight scale effect */
+  color: #ffffff;
+  /* White on hover */
+  transform: scale(1.1);
+  /* Slight scale effect */
 }
 
 .social-links-label {
@@ -166,31 +222,37 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 600px) {
-    .shell-body {
-        font-size: 0.9em;
-        min-height: 200px;
-    }
-    .shell-title {
-        font-size: 0.8em;
-    }
-    .social-links a {
-        font-size: 1.6em;
-    }
+  .shell-body {
+    font-size: 0.9em;
+    min-height: 200px;
+  }
+
+  .shell-title {
+    font-size: 0.8em;
+  }
+
+  .social-links a {
+    font-size: 1.6em;
+  }
 }
 
 @media (max-width: 400px) {
-    .shell-body {
-        font-size: 0.8em;
-    }
-     .shell-title {
-       display: none; /* Hide title on very small screens */
-    }
-     .social-links {
-        gap: 15px;
-    }
-    .social-links a {
-        font-size: 1.5em;
-    }
+  .shell-body {
+    font-size: 0.8em;
+  }
+
+  .shell-title {
+    display: none;
+    /* Hide title on very small screens */
+  }
+
+  .social-links {
+    gap: 15px;
+  }
+
+  .social-links a {
+    font-size: 1.5em;
+  }
 }
 
 
@@ -203,12 +265,15 @@ body {
   /* margin: 0 auto; Removed, positioning handled by flex parent */
   /* margin-bottom: 20px; Removed, positioning handled by flex parent */
   cursor: pointer;
-  color: inherit; /* Inherit color from body */
-  inline-size: 2rem; /* Size of the button */
+  color: inherit;
+  /* Inherit color from body */
+  inline-size: 2rem;
+  /* Size of the button */
   block-size: 2rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  display: flex; /* Center the SVG */
+  display: flex;
+  /* Center the SVG */
   justify-content: center;
   align-items: center;
 
@@ -216,48 +281,48 @@ body {
   outline-offset: 5px;
 }
 
-.theme-toggle > svg {
+.theme-toggle>svg {
   inline-size: 100%;
   block-size: 100%;
   stroke-linecap: round;
 }
 
-.sun-and-moon > :is(.moon, .sun, .sun-beams) {
+.sun-and-moon> :is(.moon, .sun, .sun-beams) {
   transform-origin: center;
 }
 
-.sun-and-moon > :is(.moon, .sun) {
+.sun-and-moon> :is(.moon, .sun) {
   fill: var(--icon-fill);
 }
 
-.theme-toggle:is(:hover, :focus-visible) > .sun-and-moon > :is(.moon, .sun) {
+.theme-toggle:is(:hover, :focus-visible)>.sun-and-moon> :is(.moon, .sun) {
   fill: var(--icon-fill-hover);
 }
 
-.sun-and-moon > .sun-beams {
+.sun-and-moon>.sun-beams {
   stroke: var(--icon-fill);
   stroke-width: 2px;
 }
 
-.theme-toggle:is(:hover, :focus-visible) .sun-and-moon > .sun-beams {
+.theme-toggle:is(:hover, :focus-visible) .sun-and-moon>.sun-beams {
   stroke: var(--icon-fill-hover);
 }
 
 /* Dark Theme State Styles (body:not(.light-theme)) */
-body:not(.light-theme) .sun-and-moon > .sun {
+body:not(.light-theme) .sun-and-moon>.sun {
   transform: scale(1.75);
 }
 
-body:not(.light-theme) .sun-and-moon > .sun-beams {
+body:not(.light-theme) .sun-and-moon>.sun-beams {
   opacity: 0;
 }
 
-body:not(.light-theme) .sun-and-moon > .moon > circle {
+body:not(.light-theme) .sun-and-moon>.moon>circle {
   transform: translateX(-7px);
 }
 
 @supports (cx: 1) {
-  body:not(.light-theme) .sun-and-moon > .moon > circle {
+  body:not(.light-theme) .sun-and-moon>.moon>circle {
     /* Using cx is better for animation */
     cx: 17;
     transform: translateX(0);
@@ -266,130 +331,160 @@ body:not(.light-theme) .sun-and-moon > .moon > circle {
 
 /* Animations */
 @media (prefers-reduced-motion: no-preference) {
-  .sun-and-moon > .sun {
+  .sun-and-moon>.sun {
     transition: transform .5s var(--ease-elastic-3);
   }
 
-  .sun-and-moon > .sun-beams {
+  .sun-and-moon>.sun-beams {
     transition: transform .5s var(--ease-elastic-4), opacity .5s var(--ease-3);
   }
 
-  .sun-and-moon .moon > circle {
+  .sun-and-moon .moon>circle {
     transition: transform .25s var(--ease-out-5);
   }
 
   @supports (cx: 1) {
-    .sun-and-moon .moon > circle {
+    .sun-and-moon .moon>circle {
       transition: cx .25s var(--ease-out-5);
     }
   }
 
   /* Dark theme transition overrides */
-  body:not(.light-theme) .sun-and-moon > .sun {
+  body:not(.light-theme) .sun-and-moon>.sun {
     transition-timing-function: var(--ease-3);
     transition-duration: .25s;
-    transform: scale(1.75); /* Explicitly state end value */
+    transform: scale(1.75);
+    /* Explicitly state end value */
   }
 
-  body:not(.light-theme) .sun-and-moon > .sun-beams {
+  body:not(.light-theme) .sun-and-moon>.sun-beams {
     transition-duration: .15s;
-    transform: rotateZ(-25deg); /* Explicitly state end value */
+    transform: rotateZ(-25deg);
+    /* Explicitly state end value */
   }
 
-  body:not(.light-theme) .sun-and-moon > .moon > circle {
+  body:not(.light-theme) .sun-and-moon>.moon>circle {
     transition-duration: .5s;
     transition-delay: .25s;
   }
 }
+
 /* --- End Theme Toggle Button --- */
 
 
 /* --- Light Theme Variables & Styles --- */
 :root {
-    /* Default: Dark Theme Variables */
-    --bg-color: #1e1e1e;
-    --text-color: #d4d4d4;
-    --shell-bg: #2d2d2d;
-    --shell-header-bg: #3c3c3c;
-    --shell-title-color: #cccccc;
-    --shell-body-color: #40E0D0; /* Turquoise */
-    --cursor-color: #40E0D0;
-    --prompt-color: #57a6fd;
-    --command-color: #d4d4d4;
-    --social-link-color: #a0a0a0;
-    --social-link-hover-color: #ffffff;
-    --particle-color: rgba(173, 216, 230, 0.6); /* Light blue */
-    --particle-line-color: rgba(173, 216, 230, 0.3);
-    /* Icon colors for dark theme */
-    --icon-fill: #d4d4d4; /* Match text color */
-    --icon-fill-hover: #ffffff; /* Match social link hover */
+  /* Default: Dark Theme Variables */
+  --bg-color: #1e1e1e;
+  --text-color: #d4d4d4;
+  --shell-bg: #2d2d2d;
+  --shell-header-bg: #3c3c3c;
+  --shell-title-color: #cccccc;
+  --shell-body-color: #40E0D0;
+  /* Turquoise */
+  --cursor-color: #40E0D0;
+  --prompt-color: #57a6fd;
+  --command-color: #d4d4d4;
+  --social-link-color: #a0a0a0;
+  --social-link-hover-color: #ffffff;
+  --particle-color: rgba(173, 216, 230, 0.6);
+  /* Light blue */
+  --particle-line-color: rgba(173, 216, 230, 0.3);
+  /* Icon colors for dark theme */
+  --icon-fill: #d4d4d4;
+  /* Match text color */
+  --icon-fill-hover: #ffffff;
+  /* Match social link hover */
 }
 
 body.light-theme {
-    /* Light Theme Overrides */
-    --bg-color: #f4f4f4;
-    --text-color: #333333;
-    --shell-bg: #ffffff;
-    --shell-header-bg: #e0e0e0;
-    --shell-title-color: #555555;
-    --shell-body-color: #008080; /* Teal */
-    --cursor-color: #008080;
-    --prompt-color: #007bff;
-    --command-color: #333333;
-    --social-link-color: #555555;
-    --social-link-hover-color: #000000;
-    /* Inverted particle colors for light theme */
-    --particle-color: rgba(45, 45, 45, 0.6); /* Dark grey/black particles */
-    --particle-line-color: rgba(45, 45, 45, 0.3); /* Dark grey/black lines */
-    /* Icon colors for light theme */
-    --icon-fill: #333333; /* Match text color */
-    --icon-fill-hover: #000000; /* Match social link hover */
+  /* Light Theme Overrides */
+  --bg-color: #f4f4f4;
+  --text-color: #333333;
+  --shell-bg: #ffffff;
+  --shell-header-bg: #e0e0e0;
+  --shell-title-color: #555555;
+  --shell-body-color: #008080;
+  /* Teal */
+  --cursor-color: #008080;
+  --prompt-color: #007bff;
+  --command-color: #333333;
+  --social-link-color: #555555;
+  --social-link-hover-color: #000000;
+  /* Inverted particle colors for light theme */
+  --particle-color: rgba(45, 45, 45, 0.6);
+  /* Dark grey/black particles */
+  --particle-line-color: rgba(45, 45, 45, 0.3);
+  /* Dark grey/black lines */
+  /* Icon colors for light theme */
+  --icon-fill: #333333;
+  /* Match text color */
+  --icon-fill-hover: #000000;
+  /* Match social link hover */
 }
 
 /* Apply variables */
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .shell-container {
-    background-color: var(--shell-bg);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Adjust shadow for light theme */
+  background-color: var(--shell-bg);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  /* Adjust shadow for light theme */
 }
 
 .shell-header {
-    background-color: var(--shell-header-bg);
+  background-color: var(--shell-header-bg);
 }
 
 .shell-title {
-    color: var(--shell-title-color);
+  color: var(--shell-title-color);
 }
 
 .shell-body {
-    color: var(--shell-body-color);
+  color: var(--shell-body-color);
 }
 
 .cursor {
-    background-color: var(--cursor-color);
-    /* Update blink animation color */
+  background-color: var(--cursor-color);
+  /* Update blink animation color */
 }
 
 @keyframes blink {
-    from, to { background-color: transparent; }
-    50% { background-color: var(--cursor-color); }
+
+  from,
+  to {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: var(--cursor-color);
+  }
 }
 
 /* Update prompt/command/output colors if using spans (currently commented out in JS) */
-.prompt { color: var(--prompt-color); }
-.command { color: var(--command-color); }
-.output { color: var(--shell-body-color); } /* Match shell body color */
+.prompt {
+  color: var(--prompt-color);
+}
+
+.command {
+  color: var(--command-color);
+}
+
+.output {
+  color: var(--shell-body-color);
+}
+
+/* Match shell body color */
 
 .social-links a {
-    color: var(--social-link-color);
+  color: var(--social-link-color);
 }
 
 .social-links a:hover {
-    color: var(--social-link-hover-color);
+  color: var(--social-link-hover-color);
 }
 
 /* Removed old toggle switch color updates */
@@ -400,10 +495,11 @@ body {
 
 /* Particle Canvas Styling */
 #particle-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Behind all other content */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /* Behind all other content */
 }

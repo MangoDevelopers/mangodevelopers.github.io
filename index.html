@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Mango Developers - A passionate group of software developers creating awesome stuff.">
     <title>Mango Developers</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="icon" type="image/png" href="assets/images/favicon-96x96.png" sizes="96x96" />
@@ -12,8 +26,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
 </head>
+
 <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
     <div class="container">
         <div class="shell-container">
             <div class="shell-header">
@@ -26,42 +41,47 @@
                 <pre id="shell-output"><span class="cursor">_</span></pre>
             </div>
         </div>
-<!-- Theme Toggle Switch -->
-<!-- Controls Container -->
-<div class="controls-container">
-    <!-- Theme Control -->
-    <div class="theme-control">
-        <!-- span class="theme-label-text">Theme</span> -->
-        <button class="theme-toggle" id="theme-toggle" title="Toggle Theme" aria-label="auto" aria-live="polite">
-          <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
-            <mask class="moon" id="moon-mask">
-              <rect x="0" y="0" width="100%" height="100%" fill="white" />
-              <circle cx="24" cy="10" r="6" fill="black" />
-            </mask>
-            <circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
-            <g class="sun-beams" stroke="currentColor">
-              <line x1="12" y1="1" x2="12" y2="3" />
-              <line x1="12" y1="21" x2="12" y2="23" />
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-              <line x1="1" y1="12" x2="3" y2="12" />
-              <line x1="21" y1="12" x2="23" y2="12" />
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-             </g>
-          </svg>
-        </button>
-    </div>
+        <!-- Theme Toggle Switch -->
+        <!-- Controls Container -->
+        <div class="controls-container">
+            <!-- Theme Control -->
+            <div class="theme-control">
+                <!-- span class="theme-label-text">Theme</span> -->
+                <button class="theme-toggle" id="theme-toggle" title="Toggle Theme" aria-label="auto"
+                    aria-live="polite">
+                    <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+                        <mask class="moon" id="moon-mask">
+                            <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                            <circle cx="24" cy="10" r="6" fill="black" />
+                        </mask>
+                        <circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
+                        <g class="sun-beams" stroke="currentColor">
+                            <line x1="12" y1="1" x2="12" y2="3" />
+                            <line x1="12" y1="21" x2="12" y2="23" />
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                            <line x1="1" y1="12" x2="3" y2="12" />
+                            <line x1="21" y1="12" x2="23" y2="12" />
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                        </g>
+                    </svg>
+                </button>
+            </div>
 
-    <!-- Social Links -->
-    <div class="social-links">
-        <span class="social-links-label">Follow us</span>
-        <a href="https://github.com/mangodevelopers" target="_blank" aria-label="GitHub" title="GitHub"><i class="fab fa-github"></i></a>
-        <a href="https://instagram.com/mangodevs" target="_blank" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://twitter.com/mangodevs" target="_blank" aria-label="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
-    </div>
-</div>
+            <!-- Social Links -->
+            <div class="social-links">
+                <span class="social-links-label">Follow us</span>
+                <a href="https://github.com/mangodevelopers" target="_blank" rel="noopener noreferrer"
+                    aria-label="GitHub" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://instagram.com/mangodevs" target="_blank" rel="noopener noreferrer"
+                    aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com/mangodevs" target="_blank" rel="noopener noreferrer" aria-label="Twitter"
+                    title="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
 
-    <script src="script.js"></script>
+        <script src="script.js"></script>
 </body>
+
 </html>
