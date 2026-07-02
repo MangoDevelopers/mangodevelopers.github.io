@@ -32,8 +32,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
 
     <link rel="icon" type="image/png" href="../../assets/images/favicon-96x96.png" sizes="96x96" />
@@ -41,6 +40,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png" />
 
     <style>
+        /* ============================================================
+           Design tokens — extracted from bevel.health's stylesheets.
+           Documented in the private repo at design/README.md.
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -48,19 +51,18 @@
         }
 
         :root {
-            --bg: #fbfbf9;
-            --surface: #ffffff;
-            --border: #e9edf0;
-            --text: #101418;
-            --text-dim: #5b6672;
-            --accent: #2196f3;
-            --accent-dark: #1478d4;
-            --accent-soft: #e8f4fe;
-            --beta: #d64524;
-            --beta-soft: #fff1ec;
-            --beta-border: #ffd9cd;
-            --radius: 20px;
-            --shadow: 0 8px 30px rgba(16, 24, 40, 0.07);
+            --bg: #f3f6f7;
+            --ink: #1f2025;
+            --ink-60: #1f202599;
+            --light: #ebf0f8;
+            --white: #ffffff;
+            --coral: #ffab94;
+            --cyan: #7ddcff;
+            --lilac: #b9a6ff;
+            --mint: #3fffc2;
+            --blue: #415eee;
+            --heading: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            --body-font: -apple-system, BlinkMacSystemFont, Inter, 'Segoe UI', sans-serif;
         }
 
         html {
@@ -68,589 +70,731 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            font-family: var(--body-font);
+            background-color: var(--bg);
+            color: var(--ink);
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: .01em;
             -webkit-font-smoothing: antialiased;
         }
 
-        .wrap {
-            max-width: 1060px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* ---------- Nav ---------- */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: rgba(251, 251, 249, 0.85);
-            backdrop-filter: saturate(180%) blur(12px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        nav .wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 700;
-            font-size: 1.05rem;
-        }
-
-        .brand img {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 26px;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.92rem;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover {
-            color: var(--text);
-        }
-
-        .nav-links a.nav-cta {
-            background: var(--text);
-            color: #fff;
-            padding: 9px 18px;
-            border-radius: 999px;
-            font-weight: 600;
-        }
-
-        .nav-links a.nav-cta:hover {
-            background: #2b3540;
+        .container {
+            width: calc(100% - 4rem);
+            max-width: 75rem;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @media (max-width: 640px) {
-            .nav-links a:not(.nav-cta) {
-                display: none;
+            .container {
+                width: calc(100% - 2.5rem);
             }
         }
 
-        /* ---------- Hero ---------- */
-        .hero {
-            text-align: center;
-            padding: 76px 0 30px;
+        /* ---------- Buttons (Bevel: 8rem pill, .75/1.5rem padding) ---------- */
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .75rem 1.5rem;
+            border-radius: 8rem;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: 0;
+            text-decoration: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: background-color .2s, color .2s, border-color .2s;
         }
 
+        .button.is-primary {
+            background-color: var(--ink);
+            border-color: var(--ink);
+            color: var(--white);
+        }
+
+        .button.is-primary:hover {
+            background-color: #000;
+            border-color: #000;
+        }
+
+        .button.is-secondary {
+            background-color: transparent;
+            border-color: #000;
+            color: var(--ink);
+        }
+
+        .button.is-secondary:hover {
+            background-color: #000;
+            color: var(--white);
+        }
+
+        .button.is-small {
+            padding: .5rem 1.25rem;
+            font-size: .9375rem;
+        }
+
+        .button svg {
+            width: 1.05em;
+            height: 1.05em;
+        }
+
+        /* ---------- Frosted floating nav (Bevel .navigation / .nav_layout-2) ---------- */
+        .navigation {
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            max-width: 90rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .nav_pill {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            -webkit-backdrop-filter: blur(.75rem);
+            backdrop-filter: blur(.75rem);
+            background-color: #fff9;
+            border-radius: 2rem;
+            padding: .5rem .5rem .5rem 1.25rem;
+        }
+
+        .nav_home {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            color: var(--ink);
+            text-decoration: none;
+            font-family: var(--heading);
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -.01em;
+            padding: .25rem 0;
+            transition: color .15s;
+        }
+
+        .nav_home:hover {
+            color: var(--ink-60);
+        }
+
+        .nav_home img {
+            height: 1.35rem;
+            width: auto;
+            display: block;
+        }
+
+        .nav_menu {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+        }
+
+        .nav_link {
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color .15s;
+        }
+
+        .nav_link:hover {
+            color: var(--ink-60);
+        }
+
+        @media (max-width: 700px) {
+            .nav_menu .nav_link {
+                display: none;
+            }
+
+            .nav_pill {
+                gap: 1.25rem;
+            }
+        }
+
+        /* ---------- Hero (Bevel: inset rounded sky panel) ---------- */
+        .hero_section {
+            padding-top: .5rem;
+            position: relative;
+        }
+
+        .hero_panel {
+            position: relative;
+            background-image: linear-gradient(#d2e5ff, #fff9ee);
+            border-radius: 1.5rem;
+            width: calc(100% - 1rem);
+            margin-left: auto;
+            margin-right: auto;
+            padding: 8.5rem 1.5rem 0;
+            overflow: hidden;
+        }
+
+        /* soft cloud shapes, blended like Bevel's hero clouds */
+        .hero_clouds {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .hero_clouds span {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(closest-side, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0));
+            filter: blur(6px);
+        }
+
+        .hero_clouds span:nth-child(1) {
+            width: 34rem;
+            height: 11rem;
+            top: 9%;
+            left: -6%;
+        }
+
+        .hero_clouds span:nth-child(2) {
+            width: 26rem;
+            height: 8rem;
+            top: 20%;
+            right: -4%;
+        }
+
+        .hero_clouds span:nth-child(3) {
+            width: 40rem;
+            height: 12rem;
+            top: 46%;
+            left: 18%;
+        }
+
+        .hero_content {
+            position: relative;
+            text-align: center;
+            max-width: 52rem;
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            font-size: .875rem;
+            font-weight: 500;
+            letter-spacing: .1em;
+            line-height: 1;
+            text-transform: uppercase;
+            color: var(--ink-60);
+            margin-bottom: 1.5em;
+        }
+
+        /* glass pill — Bevel's frosted button treatment */
         .beta-pill {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: var(--beta-soft);
-            border: 1px solid var(--beta-border);
-            color: var(--beta);
-            font-size: 0.82rem;
-            font-weight: 600;
-            padding: 7px 16px;
-            border-radius: 999px;
-            margin-bottom: 26px;
+            gap: .5rem;
+            -webkit-backdrop-filter: blur(.75rem);
+            backdrop-filter: blur(.75rem);
+            background-color: #ffffff1a;
+            box-shadow: inset 0 1px #fff, inset 0 0 .25rem #ffffff40;
+            border-radius: 8rem;
+            padding: .5rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: var(--ink);
+            margin-bottom: 1.75rem;
         }
 
         .beta-pill .dot {
-            width: 7px;
-            height: 7px;
+            width: .5rem;
+            height: .5rem;
             border-radius: 50%;
-            background: var(--beta);
-            animation: pulse 2s infinite;
+            background: var(--coral);
+            box-shadow: 0 0 0 3px color-mix(in hsl, var(--coral) 35%, transparent);
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.35; }
+        h1 {
+            font-family: var(--heading);
+            font-size: clamp(3rem, 2.857vw + 2.429rem, 5rem);
+            font-weight: 600;
+            letter-spacing: -.03em;
+            line-height: 1;
+            margin-bottom: .2em;
         }
 
-        .hero h1 {
-            font-size: clamp(2.4rem, 6vw, 3.8rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.08;
-            max-width: 780px;
-            margin: 0 auto;
+        .hero_p {
+            font-size: 1.25rem;
+            color: var(--ink-60);
+            max-width: 34rem;
+            margin: 1rem auto 0;
         }
 
-        .hero h1 .accent {
-            color: var(--accent);
-        }
-
-        .hero p.sub {
-            color: var(--text-dim);
-            font-size: 1.18rem;
-            max-width: 620px;
-            margin: 22px auto 0;
-        }
-
-        .cta-row {
-            margin-top: 34px;
+        .hero_btns {
             display: flex;
-            gap: 14px;
+            gap: .75rem;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 2rem;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 15px 30px;
-            border-radius: 999px;
+        .hero_version {
+            margin-top: 1.5rem;
+            font-size: .9375rem;
+            color: var(--ink-60);
+        }
+
+        .hero_version strong {
+            color: var(--ink);
             font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
         }
 
-        .btn.primary {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 8px 22px rgba(33, 150, 243, 0.35);
+        /* TV mockup, masked fade at panel bottom like Bevel's hero media */
+        .hero_media {
+            position: relative;
+            max-width: 46rem;
+            margin: 3.5rem auto 0;
+            -webkit-mask-image: linear-gradient(#000 76%, transparent 100%);
+            mask-image: linear-gradient(#000 76%, transparent 100%);
         }
 
-        .btn.primary:hover {
-            background: var(--accent-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn.ghost {
-            background: var(--surface);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .btn.ghost:hover {
-            border-color: #cfd7dd;
-            transform: translateY(-2px);
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 34px;
-            margin-top: 30px;
-            color: var(--text-dim);
-            font-size: 0.92rem;
-        }
-
-        .stats strong {
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        /* ---------- TV mockup ---------- */
-        .tv-stage {
-            padding: 44px 0 20px;
-        }
-
-        .tv {
-            max-width: 720px;
-            margin: 0 auto;
-        }
-
-        .tv .screen {
+        .tv_screen {
             background: #0b0f14;
-            border-radius: 18px;
-            padding: 12px;
-            box-shadow: 0 30px 70px rgba(16, 24, 40, 0.18);
+            border-radius: 1.25rem;
+            padding: .75rem;
+            box-shadow: 0 2rem 4rem #1f202533;
         }
 
-        .tv .screen img {
+        .tv_screen img {
             display: block;
             width: 100%;
-            border-radius: 10px;
+            border-radius: .65rem;
         }
 
-        .tv .stand {
-            width: 120px;
-            height: 12px;
-            margin: 0 auto;
-            background: #d8dde2;
-            border-radius: 0 0 10px 10px;
+        /* ---------- Sections ---------- */
+        .section {
+            padding: 6rem 0 0;
         }
 
-        .tv .base {
-            width: 240px;
-            height: 8px;
-            margin: 0 auto;
-            background: #c9cfd6;
-            border-radius: 999px;
+        .section-header {
+            text-align: center;
+            max-width: 44rem;
+            margin: 0 auto 3rem;
+        }
+
+        h2 {
+            font-family: var(--heading);
+            font-size: clamp(2.5rem, 2.143vw + 2.071rem, 4rem);
+            font-weight: 600;
+            letter-spacing: -.03em;
+            line-height: 1;
+            margin-bottom: .3em;
+        }
+
+        .section-header p {
+            color: var(--ink-60);
+            font-size: 1.125rem;
         }
 
         /* ---------- Beta strip ---------- */
         .beta-strip {
-            max-width: 720px;
-            margin: 34px auto 0;
-            background: var(--beta-soft);
-            border: 1px solid var(--beta-border);
-            border-radius: var(--radius);
-            padding: 18px 24px;
             display: flex;
-            gap: 14px;
+            gap: 1rem;
             align-items: flex-start;
-            font-size: 0.93rem;
-            color: #7a3a28;
+            max-width: 46rem;
+            margin: 2.5rem auto 0;
+            background: color-mix(in hsl, var(--coral) 24%, transparent);
+            border-radius: 2rem;
+            padding: 1.25rem 1.75rem;
+            font-size: .9375rem;
+            text-align: left;
         }
 
-        .beta-strip .icon {
-            font-size: 1.2rem;
-            line-height: 1.4;
+        .beta-strip svg {
+            flex-shrink: 0;
+            width: 1.35rem;
+            height: 1.35rem;
+            margin-top: .1rem;
         }
 
-        .beta-strip strong {
-            color: var(--beta);
+        .beta-strip a {
+            color: var(--ink);
+            font-weight: 600;
         }
 
-        /* ---------- Sections ---------- */
-        section {
-            padding: 72px 0 0;
-        }
-
-        .kicker {
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-align: center;
-        }
-
-        section h2 {
-            font-size: clamp(1.7rem, 4vw, 2.3rem);
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        section p.lede {
-            color: var(--text-dim);
-            text-align: center;
-            max-width: 560px;
-            margin: 12px auto 0;
-        }
-
-        .features {
-            margin-top: 44px;
+        /* ---------- Feature cards ---------- */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+            gap: 1.25rem;
         }
 
         .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 28px;
-            box-shadow: var(--shadow);
+            background: var(--white);
+            border-radius: 2rem;
+            padding: 2rem;
         }
 
-        .card .emoji {
+        .icon-chip {
             display: inline-flex;
-            width: 46px;
-            height: 46px;
             align-items: center;
             justify-content: center;
-            background: var(--accent-soft);
-            border-radius: 12px;
-            font-size: 1.3rem;
-            margin-bottom: 16px;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            margin-bottom: 1.25rem;
         }
 
+        .icon-chip svg {
+            width: 1.4rem;
+            height: 1.4rem;
+            color: var(--ink);
+        }
+
+        .tint-coral { background: color-mix(in hsl, var(--coral) 40%, transparent); }
+        .tint-cyan { background: color-mix(in hsl, var(--cyan) 40%, transparent); }
+        .tint-lilac { background: color-mix(in hsl, var(--lilac) 40%, transparent); }
+        .tint-mint { background: color-mix(in hsl, var(--mint) 40%, transparent); }
+        .tint-blue { background: color-mix(in hsl, var(--blue) 20%, transparent); }
+        .tint-light { background: var(--light); }
+
         .card h3 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-family: var(--heading);
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -.02em;
+            margin-bottom: .4rem;
         }
 
         .card p {
-            color: var(--text-dim);
-            font-size: 0.92rem;
+            color: var(--ink-60);
+            font-size: .9375rem;
         }
 
         /* ---------- Downloads ---------- */
         .dl-grid {
-            margin-top: 44px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+            gap: 1.25rem;
         }
 
         .dl-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
+            background: var(--white);
+            border-radius: 2rem;
+            padding: 2.5rem;
         }
 
-        .dl-card .flavor-tag {
-            display: inline-block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--accent);
-            background: var(--accent-soft);
-            padding: 4px 12px;
-            border-radius: 999px;
-            margin-bottom: 14px;
+        .dl-card .eyebrow {
+            margin-bottom: 1em;
         }
 
         .dl-card h3 {
-            font-size: 1.25rem;
-            font-weight: 800;
+            font-family: var(--heading);
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -.02em;
         }
 
-        .dl-card p {
-            color: var(--text-dim);
-            font-size: 0.92rem;
-            margin: 8px 0 20px;
+        .dl-card>p {
+            color: var(--ink-60);
+            font-size: .9375rem;
+            margin: .5rem 0 1.5rem;
         }
 
-        .dl-card .row {
+        .dl-row {
             display: flex;
-            gap: 10px;
+            gap: .6rem;
             flex-wrap: wrap;
-        }
-
-        .btn.small {
-            padding: 11px 20px;
-            font-size: 0.9rem;
         }
 
         .dl-note {
             text-align: center;
-            color: var(--text-dim);
-            font-size: 0.88rem;
-            margin-top: 22px;
+            color: var(--ink-60);
+            font-size: .9375rem;
+            margin-top: 1.75rem;
         }
 
         .dl-note a {
-            color: var(--accent);
-            text-decoration: none;
+            color: var(--ink);
             font-weight: 600;
         }
 
-        /* ---------- Install steps ---------- */
+        /* ---------- Steps ---------- */
         .steps {
-            margin-top: 44px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+            gap: 1.25rem;
             counter-reset: step;
         }
 
         .step {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 26px;
-            box-shadow: var(--shadow);
+            background: var(--white);
+            border-radius: 2rem;
+            padding: 2rem;
         }
 
         .step::before {
             counter-increment: step;
             content: counter(step);
             display: inline-flex;
-            width: 34px;
-            height: 34px;
+            width: 2.25rem;
+            height: 2.25rem;
             align-items: center;
             justify-content: center;
-            background: var(--text);
-            color: #fff;
-            font-weight: 700;
+            background: var(--ink);
+            color: var(--white);
+            font-family: var(--heading);
+            font-weight: 600;
             border-radius: 50%;
-            margin-bottom: 14px;
+            margin-bottom: 1rem;
         }
 
         .step p {
-            color: var(--text-dim);
-            font-size: 0.92rem;
+            color: var(--ink-60);
+            font-size: .9375rem;
         }
 
         .step code {
-            background: var(--accent-soft);
-            color: var(--accent-dark);
-            padding: 2px 7px;
-            border-radius: 6px;
-            font-size: 0.85em;
+            background: var(--light);
+            color: var(--ink);
+            padding: .1rem .45rem;
+            border-radius: .4rem;
+            font-size: .85em;
         }
 
         /* ---------- Footer ---------- */
         footer {
-            margin-top: 90px;
-            border-top: 1px solid var(--border);
-            background: var(--surface);
+            margin-top: 6rem;
+            padding: 4rem 0 2rem;
         }
 
-        .foot-grid {
+        .foot-card {
+            background: var(--white);
+            border-radius: 2rem;
+            padding: 3rem;
             display: grid;
             grid-template-columns: 2fr 1fr 1fr;
-            gap: 30px;
-            padding: 50px 0 30px;
+            gap: 2rem;
         }
 
         @media (max-width: 640px) {
-            .foot-grid {
+            .foot-card {
                 grid-template-columns: 1fr;
             }
         }
 
-        .foot-grid h4 {
-            font-size: 0.85rem;
+        .foot-card img.wordmark {
+            width: 10rem;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .foot-card .about {
+            color: var(--ink-60);
+            font-size: .9375rem;
+            max-width: 18rem;
+        }
+
+        .foot-card h4 {
+            font-size: .875rem;
+            font-weight: 500;
+            letter-spacing: .1em;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--text-dim);
-            margin-bottom: 14px;
+            color: var(--ink-60);
+            margin-bottom: 1rem;
         }
 
-        .foot-grid a {
+        .foot-card a {
             display: block;
-            color: var(--text);
+            color: var(--ink);
             text-decoration: none;
-            font-size: 0.92rem;
-            margin-bottom: 10px;
+            font-size: .9375rem;
+            margin-bottom: .65rem;
+            transition: color .15s;
         }
 
-        .foot-grid a:hover {
-            color: var(--accent);
-        }
-
-        .foot-brand p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            max-width: 300px;
-            margin-top: 10px;
+        .foot-card a:hover {
+            color: var(--ink-60);
         }
 
         .copyright {
-            border-top: 1px solid var(--border);
-            padding: 18px 0 26px;
-            color: var(--text-dim);
-            font-size: 0.83rem;
             text-align: center;
+            color: var(--ink-60);
+            font-size: .875rem;
+            padding-top: 1.5rem;
+        }
+
+        /* ---------- Scroll animations (Bevel-style fade-up) ---------- */
+        [data-animate] {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .6s cubic-bezier(.25, .46, .45, .94),
+                transform .6s cubic-bezier(.25, .46, .45, .94);
+        }
+
+        [data-animate].in-view {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            [data-animate],
+            [data-animate].in-view {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
         }
     </style>
 </head>
 
 <body>
-    <nav>
-        <div class="wrap">
-            <a class="brand" href="./">
-                <img src="icon.png" alt="VastBrowser icon">
+    <div class="navigation">
+        <div class="nav_pill">
+            <a class="nav_home" href="./">
+                <img src="logo-mark-dark.png" alt="VastBrowser logo">
                 VastBrowser
             </a>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#downloads">Downloads</a>
-                <a href="/apps/">All apps</a>
-                <a class="nav-cta" data-flavor="VastBrowser-arm64-v8a"
+            <div class="nav_menu">
+                <a class="nav_link" href="#features">Features</a>
+                <a class="nav_link" href="#downloads">Downloads</a>
+                <a class="nav_link" href="/apps/">All apps</a>
+                <a class="button is-primary is-small" data-flavor="VastBrowser-arm64-v8a"
                     href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-arm64-v8a.apk">Download</a>
             </div>
         </div>
-    </nav>
+    </div>
 
     <main>
-        <div class="wrap">
-            <div class="hero">
-                <span class="beta-pill" data-beta><span class="dot"></span> Early Preview — Beta Version</span>
-                <h1>The web, on your <span class="accent">biggest screen</span>.</h1>
-                <p class="sub">VastBrowser is a fast, remote-friendly web browser for Android TV and Fire TV —
-                    browse any website from your couch with just your TV remote.</p>
+        <div class="hero_section">
+            <div class="hero_panel">
+                <div class="hero_clouds" aria-hidden="true"><span></span><span></span><span></span></div>
 
-                <div class="cta-row">
-                    <a class="btn primary" data-flavor="VastBrowser-arm64-v8a"
-                        href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-arm64-v8a.apk">
-                        &#11015; Download free
-                    </a>
-                    <a class="btn ghost" href="#downloads">All versions</a>
-                </div>
-
-                <div class="stats">
-                    <span>Version <strong id="stat-version">0.3.0</strong></span>
-                    <span><strong id="stat-downloads">—</strong> downloads</span>
-                    <span><strong>Free</strong> forever</span>
-                </div>
-            </div>
-
-            <div class="tv-stage">
-                <div class="tv">
-                    <div class="screen"><img src="banner.png" alt="VastBrowser on a TV screen"></div>
-                    <div class="stand"></div>
-                    <div class="base"></div>
-                </div>
-
-                <div class="beta-strip" data-beta>
-                    <span class="icon">🚧</span>
-                    <div>
-                        <strong>VastBrowser is in early preview.</strong> You're welcome to try it today — it's free
-                        and updated frequently — but expect rough edges while we work toward the stable 1.0 release.
-                        Found a bug? <a style="color:var(--beta);font-weight:600"
-                            href="https://github.com/MangoDevelopers/vast-browser-release/issues" target="_blank"
-                            rel="noopener noreferrer">Tell us on GitHub</a>.
+                <div class="hero_content">
+                    <div class="eyebrow" data-animate>Android TV · Google TV · Fire TV</div>
+                    <div class="beta-pill" data-beta data-animate><span class="dot"></span>Early Preview — Beta
+                        Version</div>
+                    <h1 data-animate>The web, on your biggest screen.</h1>
+                    <p class="hero_p" data-animate>A fast, remote-friendly web browser for your TV — browse any
+                        website from the couch with nothing but your remote.</p>
+                    <div class="hero_btns" data-animate>
+                        <a class="button is-primary" data-flavor="VastBrowser-arm64-v8a"
+                            href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-arm64-v8a.apk">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5" />
+                                <path d="M4 19.5h16" />
+                            </svg>
+                            Download free
+                        </a>
+                        <a class="button is-secondary" href="#downloads">All versions</a>
                     </div>
+                    <p class="hero_version" data-animate>Latest release <strong id="stat-version">v0.3.0</strong></p>
+                </div>
+
+                <div class="hero_media" data-animate>
+                    <div class="tv_screen"><img src="banner.png" alt="VastBrowser running on a TV"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="beta-strip" data-beta data-animate>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 8v4.5M12 15.5v.5" />
+                </svg>
+                <div><strong>VastBrowser is in early preview.</strong> It's free and updated frequently, but expect
+                    rough edges while we work toward the stable 1.0 release. Found a bug?
+                    <a href="https://github.com/MangoDevelopers/vast-browser-release/issues" target="_blank"
+                        rel="noopener noreferrer">Tell us on GitHub</a>.
                 </div>
             </div>
 
-            <section id="features">
-                <div class="kicker">Features</div>
-                <h2>Built for the living room</h2>
-                <p class="lede">Everything about VastBrowser is designed around one idea: the only thing in your hand
-                    is a TV remote.</p>
-                <div class="features">
-                    <div class="card">
-                        <span class="emoji">🎯</span>
+            <section class="section" id="features">
+                <div class="section-header">
+                    <div class="eyebrow" data-animate>Features</div>
+                    <h2 data-animate>Built for the living room</h2>
+                    <p data-animate>Everything is designed around one idea: the only thing in your hand is a TV
+                        remote.</p>
+                </div>
+                <div class="grid">
+                    <div class="card" data-animate>
+                        <span class="icon-chip tint-coral">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 3l7.5 18 2.2-7.3L22 11.5 5 3z" />
+                            </svg>
+                        </span>
                         <h3>Remote-first cursor</h3>
                         <p>An on-screen cursor and dedicated scroll mode make any website usable with a D-pad — no
                             mouse or keyboard needed.</p>
                     </div>
-                    <div class="card">
-                        <span class="emoji">🦊</span>
+                    <div class="card" data-animate>
+                        <span class="icon-chip tint-cyan">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 000 18M12 3a14.5 14.5 0 010 18" />
+                            </svg>
+                        </span>
                         <h3>Real browser engine</h3>
                         <p>Powered by Mozilla's browser components — the same technology behind Firefox — not a
                             wrapped mini-view.</p>
                     </div>
-                    <div class="card">
-                        <span class="emoji">🛡️</span>
+                    <div class="card" data-animate>
+                        <span class="icon-chip tint-lilac">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3l8 3v5c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6l8-3z" />
+                                <path d="M9 12l2.2 2.2L15.5 9.5" />
+                            </svg>
+                        </span>
                         <h3>Ad blocking (Pro)</h3>
                         <p>The Pro flavor supports content-blocking extensions like uBlock Origin for a cleaner,
                             faster web on your TV.</p>
                     </div>
-                    <div class="card">
-                        <span class="emoji">⚡</span>
+                    <div class="card" data-animate>
+                        <span class="icon-chip tint-mint">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3l9 5-9 5-9-5 9-5z" />
+                                <path d="M3 13l9 5 9-5" />
+                            </svg>
+                        </span>
                         <h3>Two flavors</h3>
-                        <p>Choose the lightweight WebView build or the Pro build with Mozilla's full GeckoView engine
-                            bundled in.</p>
+                        <p>Choose the lightweight WebView build, or the Pro build with Mozilla's full GeckoView
+                            engine bundled in.</p>
                     </div>
-                    <div class="card">
-                        <span class="emoji">🔄</span>
+                    <div class="card" data-animate>
+                        <span class="icon-chip tint-blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 12a8 8 0 11-2.34-5.66" />
+                                <path d="M20 3v4h-4" />
+                            </svg>
+                        </span>
                         <h3>Frequent updates</h3>
                         <p>Engine updates land automatically as Mozilla ships them, and every release is published
                             free on GitHub.</p>
                     </div>
-                    <div class="card">
-                        <span class="emoji">🔍</span>
+                    <div class="card" data-animate>
+                        <span class="icon-chip tint-light">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M12 2.5l2.4 2 3.1-.3 1 3 2.8 1.4-1 3 1 3-2.8 1.4-1 3-3.1-.3-2.4 2-2.4-2-3.1.3-1-3L2.7 14.6l1-3-1-3L5.5 7.2l1-3 3.1.3 2.4-2z" />
+                                <path d="M8.8 12.2l2.1 2.1 4.3-4.6" />
+                            </svg>
+                        </span>
                         <h3>Verifiable builds</h3>
                         <p>Every APK is signed and ships with SHA-256 checksums, so you can verify exactly what you
                             install.</p>
@@ -658,58 +802,62 @@
                 </div>
             </section>
 
-            <section id="downloads">
-                <div class="kicker">Downloads</div>
-                <h2>Pick your flavor</h2>
-                <p class="lede">Most Android TV and Fire TV devices are <strong>arm64</strong>; older Fire TV sticks
-                    are <strong>arm v7</strong>.</p>
+            <section class="section" id="downloads">
+                <div class="section-header">
+                    <div class="eyebrow" data-animate>Downloads</div>
+                    <h2 data-animate>Pick your flavor</h2>
+                    <p data-animate>Most Android TV and Fire TV devices are arm64; older Fire TV sticks are arm v7.
+                    </p>
+                </div>
                 <div class="dl-grid">
-                    <div class="dl-card">
-                        <span class="flavor-tag">Lightweight</span>
+                    <div class="dl-card" data-animate>
+                        <div class="eyebrow">Lightweight</div>
                         <h3>VastBrowser</h3>
                         <p>Uses your TV's built-in WebView engine. Smallest download, great for most sites.</p>
-                        <div class="row">
-                            <a class="btn primary small" data-flavor="VastBrowser-arm64-v8a"
+                        <div class="dl-row">
+                            <a class="button is-primary is-small" data-flavor="VastBrowser-arm64-v8a"
                                 href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-arm64-v8a.apk">arm64</a>
-                            <a class="btn ghost small" data-flavor="VastBrowser-armeabi-v7a"
+                            <a class="button is-secondary is-small" data-flavor="VastBrowser-armeabi-v7a"
                                 href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-armeabi-v7a.apk">arm
                                 v7</a>
                         </div>
                     </div>
-                    <div class="dl-card">
-                        <span class="flavor-tag">Full engine</span>
+                    <div class="dl-card" data-animate>
+                        <div class="eyebrow">Full engine</div>
                         <h3>VastBrowser Pro</h3>
                         <p>Bundles Mozilla's GeckoView engine and supports extensions like uBlock Origin.</p>
-                        <div class="row">
-                            <a class="btn primary small" data-flavor="VastBrowser-Pro-arm64-v8a"
+                        <div class="dl-row">
+                            <a class="button is-primary is-small" data-flavor="VastBrowser-Pro-arm64-v8a"
                                 href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-Pro-arm64-v8a.apk">arm64</a>
-                            <a class="btn ghost small" data-flavor="VastBrowser-Pro-armeabi-v7a"
+                            <a class="button is-secondary is-small" data-flavor="VastBrowser-Pro-armeabi-v7a"
                                 href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-Pro-armeabi-v7a.apk">arm
                                 v7</a>
                         </div>
                     </div>
                 </div>
-                <p class="dl-note">x86 / x86_64 builds and SHA-256 checksums are on the
+                <p class="dl-note" data-animate>x86 / x86_64 builds and SHA-256 checksums are on the
                     <a href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest" target="_blank"
                         rel="noopener noreferrer">full release page</a>.
                 </p>
             </section>
 
-            <section id="install">
-                <div class="kicker">Setup</div>
-                <h2>Installed in two minutes</h2>
+            <section class="section" id="install">
+                <div class="section-header">
+                    <div class="eyebrow" data-animate>Setup</div>
+                    <h2 data-animate>Installed in two minutes</h2>
+                </div>
                 <div class="steps">
-                    <div class="step">
+                    <div class="step" data-animate>
                         <p>Download the APK for your device on your phone or computer.</p>
                     </div>
-                    <div class="step">
+                    <div class="step" data-animate>
                         <p>Send it to your TV — the free <em>Send Files to TV</em> app is the easiest way, or use a
                             USB drive.</p>
                     </div>
-                    <div class="step">
+                    <div class="step" data-animate>
                         <p>On the TV, enable <em>Install unknown apps</em> for your file manager in Settings.</p>
                     </div>
-                    <div class="step">
+                    <div class="step" data-animate>
                         <p>Open the APK and install. Developers can use
                             <code>adb install VastBrowser-arm64-v8a.apk</code>.</p>
                     </div>
@@ -719,11 +867,12 @@
     </main>
 
     <footer>
-        <div class="wrap">
-            <div class="foot-grid">
-                <div class="foot-brand">
-                    <a class="brand" href="/">Mango Developers</a>
-                    <p>A passionate group of software developers creating awesome stuff.</p>
+        <div class="container">
+            <div class="foot-card" data-animate>
+                <div>
+                    <img class="wordmark" src="logo-full-dark.png" alt="VastBrowser">
+                    <p class="about">Built by Mango Developers — a passionate group of software developers creating
+                        awesome stuff.</p>
                 </div>
                 <div>
                     <h4>Product</h4>
@@ -749,46 +898,23 @@
         (function () {
             document.getElementById('year').textContent = new Date().getFullYear();
 
-            var API = 'https://api.github.com/repos/MangoDevelopers/vast-browser-release/releases';
-
             // Beta indicator: shown by default, hidden automatically once the
             // latest released version reaches 1.0.0 or higher.
-            function hideBetaIfStable(version) {
-                var major = parseInt(version.split('.')[0], 10);
-                if (!isNaN(major) && major >= 1) {
-                    document.querySelectorAll('[data-beta]').forEach(function (el) {
-                        el.style.display = 'none';
-                    });
-                }
-            }
-
-            fetch(API + '/latest')
+            fetch('https://api.github.com/repos/MangoDevelopers/vast-browser-release/releases/latest')
                 .then(function (r) { return r.ok ? r.json() : null; })
                 .then(function (rel) {
-                    if (rel && rel.tag_name) {
-                        // tag looks like v0.3.0-build.42 — show just the version
-                        var v = rel.tag_name.replace(/^v/, '').split('-')[0];
-                        document.getElementById('stat-version').textContent = v;
-                        hideBetaIfStable(v);
+                    if (!rel || !rel.tag_name) return;
+                    // tag looks like v0.3.0-build.42 — show just the version
+                    var v = rel.tag_name.replace(/^v/, '').split('-')[0];
+                    document.getElementById('stat-version').textContent = 'v' + v;
+                    var major = parseInt(v.split('.')[0], 10);
+                    if (!isNaN(major) && major >= 1) {
+                        document.querySelectorAll('[data-beta]').forEach(function (el) {
+                            el.style.display = 'none';
+                        });
                     }
                 })
                 .catch(function () { /* keep defaults: beta shown, fallback version */ });
-
-            fetch(API + '?per_page=100')
-                .then(function (r) { return r.ok ? r.json() : []; })
-                .then(function (releases) {
-                    var total = 0;
-                    (releases || []).forEach(function (rel) {
-                        (rel.assets || []).forEach(function (a) {
-                            if (a.name && a.name.indexOf('.apk') !== -1) total += a.download_count;
-                        });
-                    });
-                    document.getElementById('stat-downloads').textContent =
-                        total >= 1000 ? (total / 1000).toFixed(1) + 'k' : String(total);
-                })
-                .catch(function () {
-                    document.getElementById('stat-downloads').textContent = '—';
-                });
 
             // Report download-button clicks as analytics events
             document.querySelectorAll('a[data-flavor]').forEach(function (link) {
@@ -798,6 +924,19 @@
                     }
                 });
             });
+
+            // Bevel-style staggered fade-up on scroll
+            var seen = 0;
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        var el = entry.target;
+                        setTimeout(function () { el.classList.add('in-view'); }, (seen++ % 6) * 80);
+                        io.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('[data-animate]').forEach(function (el) { io.observe(el); });
         })();
     </script>
 </body>
