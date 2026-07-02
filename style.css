@@ -503,3 +503,40 @@ body {
   z-index: -1;
   /* Behind all other content */
 }
+/* Apps button (below shell) */
+.apps-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background-color: #2d2d2d;
+  border: 1px solid #3c3c3c;
+  color: #d4d4d4;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.12s ease;
+}
+
+.apps-button:hover {
+  border-color: #00bcd4;
+  color: #00bcd4;
+  transform: translateY(-2px);
+}
+
+.apps-button i {
+  color: #00bcd4;
+}
+
+body.light-theme .apps-button {
+  background-color: #ffffff;
+  border-color: #d0d7de;
+  color: #333333;
+}
+
+body.light-theme .apps-button:hover {
+  border-color: #0097a7;
+  color: #0097a7;
+}
