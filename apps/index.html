@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Apps by Mango Developers — free software, built with care.">
+    <title>Our Apps | Mango Developers</title>
+
+    <!-- Google tag (gtag.js) — same property as the rest of mangodevelopers.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVE8EH4YDB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-QVE8EH4YDB');
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="../assets/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fbfbf9;
+            --surface: #ffffff;
+            --border: #e9edf0;
+            --text: #101418;
+            --text-dim: #5b6672;
+            --accent: #2196f3;
+            --accent-soft: #e8f4fe;
+            --beta: #d64524;
+            --beta-soft: #fff1ec;
+            --beta-border: #ffd9cd;
+            --radius: 20px;
+            --shadow: 0 8px 30px rgba(16, 24, 40, 0.07);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(251, 251, 249, 0.85);
+            backdrop-filter: saturate(180%) blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        nav a.home {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        nav a.home:hover {
+            color: var(--text);
+        }
+
+        .head {
+            text-align: center;
+            padding: 70px 0 20px;
+        }
+
+        .head h1 {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .head p {
+            color: var(--text-dim);
+            font-size: 1.12rem;
+            max-width: 520px;
+            margin: 14px auto 0;
+        }
+
+        .apps {
+            padding: 40px 0 80px;
+            display: grid;
+            gap: 20px;
+        }
+
+        .app-card {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text);
+            transition: transform .12s ease, box-shadow .12s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(16, 24, 40, 0.11);
+        }
+
+        .app-card img {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            flex-shrink: 0;
+        }
+
+        .app-card .info h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 4px 11px;
+            border-radius: 999px;
+        }
+
+        .badge.beta {
+            background: var(--beta-soft);
+            border: 1px solid var(--beta-border);
+            color: var(--beta);
+        }
+
+        .badge.free {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .app-card .info p {
+            color: var(--text-dim);
+            font-size: 0.93rem;
+            margin-top: 6px;
+        }
+
+        .app-card .go {
+            margin-left: auto;
+            flex-shrink: 0;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+
+        .coming {
+            text-align: center;
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 34px;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 24px 0 34px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media (max-width: 560px) {
+            .app-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .app-card .info h2 {
+                justify-content: center;
+            }
+
+            .app-card .go {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="wrap">
+            <a class="brand" href="/">Mango Developers</a>
+            <a class="home" href="/">&larr; Home</a>
+        </div>
+    </nav>
+
+    <main class="wrap">
+        <div class="head">
+            <h1>Our apps</h1>
+            <p>Free software we build and maintain — every release published openly on GitHub.</p>
+        </div>
+
+        <div class="apps">
+            <a class="app-card" href="/apps/vast-browser/">
+                <img src="vast-browser/icon.png" alt="VastBrowser icon">
+                <div class="info">
+                    <h2>VastBrowser
+                        <span class="badge beta" data-beta>Early Preview Beta</span>
+                        <span class="badge free">Free</span>
+                    </h2>
+                    <p>A fast, remote-friendly web browser for Android TV and Fire TV. Browse any website from your
+                        couch with just your TV remote.</p>
+                </div>
+                <span class="go">&rarr;</span>
+            </a>
+
+            <div class="coming">More apps are on the way — follow us on
+                <a style="color:var(--accent);text-decoration:none;font-weight:600"
+                    href="https://github.com/mangodevelopers" target="_blank" rel="noopener noreferrer">GitHub</a>
+                to be the first to know.
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="wrap">© <span id="year">2026</span> Mango Developers · <a href="/">mangodevelopers.com</a></div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Hide the VastBrowser beta badge automatically once the latest
+        // released version reaches 1.0.0 or higher.
+        fetch('https://api.github.com/repos/MangoDevelopers/vast-browser-release/releases/latest')
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (rel) {
+                if (!rel || !rel.tag_name) return;
+                var major = parseInt(rel.tag_name.replace(/^v/, '').split('.')[0], 10);
+                if (!isNaN(major) && major >= 1) {
+                    document.querySelectorAll('[data-beta]').forEach(function (el) {
+                        el.style.display = 'none';
+                    });
+                }
+            })
+            .catch(function () { /* keep beta badge visible */ });
+    </script>
+</body>
+
+</html>
