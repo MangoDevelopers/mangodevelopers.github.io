@@ -8,6 +8,15 @@
         content="VastBrowser — a fast, remote-friendly web browser for Android TV and Fire TV. Free download, early preview beta.">
     <title>VastBrowser — Web Browser for Android TV &amp; Fire TV | Mango Developers</title>
 
+    <!-- Theme is applied before first paint to avoid a flash. Dark is default. -->
+    <script>
+        (function () {
+            var t = 'dark';
+            try { t = localStorage.getItem('vb-theme') || 'dark'; } catch (e) { }
+            document.documentElement.dataset.theme = t;
+        })();
+    </script>
+
     <meta property="og:title" content="VastBrowser — Web Browser for Android TV & Fire TV">
     <meta property="og:description" content="A fast, remote-friendly web browser for your TV. Free download.">
     <meta property="og:image" content="https://mangodevelopers.com/apps/vast-browser/banner.png">
@@ -54,8 +63,13 @@
             --bg: #f3f6f7;
             --ink: #1f2025;
             --ink-60: #1f202599;
+            --ink-hover: #000000;
             --light: #ebf0f8;
             --white: #ffffff;
+            --nav-bg: #fff9;
+            --hero-a: #d2e5ff;
+            --hero-b: #fff9ee;
+            --cloud-op: 1;
             --coral: #ffab94;
             --cyan: #7ddcff;
             --lilac: #b9a6ff;
@@ -63,6 +77,28 @@
             --blue: #415eee;
             --heading: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
             --body-font: -apple-system, BlinkMacSystemFont, Inter, 'Segoe UI', sans-serif;
+        }
+
+        html[data-theme="dark"] {
+            --bg: #131417;
+            --ink: #ebf0f8;
+            --ink-60: #ebf0f899;
+            --ink-hover: #ffffff;
+            --light: #2a2d35;
+            --white: #1f2025;
+            --nav-bg: #1f202599;
+            --hero-a: #1d2947;
+            --hero-b: #372a20;
+            --cloud-op: .18;
+        }
+
+        /* theme-scoped visibility (logos, creatures, toggle icons) */
+        html[data-theme="dark"] .only-light {
+            display: none !important;
+        }
+
+        html[data-theme="light"] .only-dark {
+            display: none !important;
         }
 
         html {
@@ -117,18 +153,18 @@
         }
 
         .button.is-primary:hover {
-            background-color: #000;
-            border-color: #000;
+            background-color: var(--ink-hover);
+            border-color: var(--ink-hover);
         }
 
         .button.is-secondary {
             background-color: transparent;
-            border-color: #000;
+            border-color: var(--ink);
             color: var(--ink);
         }
 
         .button.is-secondary:hover {
-            background-color: #000;
+            background-color: var(--ink);
             color: var(--white);
         }
 
@@ -164,9 +200,34 @@
             gap: 2.5rem;
             -webkit-backdrop-filter: blur(.75rem);
             backdrop-filter: blur(.75rem);
-            background-color: #fff9;
+            background-color: var(--nav-bg);
             border-radius: 2rem;
             padding: .5rem .5rem .5rem 1.25rem;
+            transition: background-color .3s;
+        }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.55rem;
+            height: 2.55rem;
+            border-radius: 50%;
+            border: 1px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer;
+            transition: background-color .2s, color .2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--ink);
+            color: var(--white);
+        }
+
+        .theme-toggle svg {
+            width: 1.1rem;
+            height: 1.1rem;
         }
 
         .nav_home {
@@ -228,7 +289,8 @@
 
         .hero_panel {
             position: relative;
-            background-image: linear-gradient(#d2e5ff, #fff9ee);
+            background-image: linear-gradient(var(--hero-a), var(--hero-b));
+            transition: background-image .3s;
             border-radius: 1.5rem;
             width: calc(100% - 1rem);
             margin-left: auto;
@@ -243,6 +305,8 @@
             inset: 0;
             pointer-events: none;
             mix-blend-mode: screen;
+            opacity: var(--cloud-op);
+            transition: opacity .3s;
         }
 
         .hero_clouds span {
@@ -355,9 +419,80 @@
         .hero_media {
             position: relative;
             max-width: 46rem;
-            margin: 3.5rem auto 0;
+            margin: 5.5rem auto 0;
+        }
+
+        .hero_media .tv_wrap {
             -webkit-mask-image: linear-gradient(#000 76%, transparent 100%);
             mask-image: linear-gradient(#000 76%, transparent 100%);
+        }
+
+        /* ---------- Perched mascots (owls in dark, birds in light) ---------- */
+        .perch {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 9%;
+            transform: translateY(-93%);
+            pointer-events: none;
+        }
+
+        .creature {
+            display: inline-flex;
+            animation: bob 6s ease-in-out infinite;
+        }
+
+        .creature:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        .creature svg {
+            display: block;
+            transition: transform .25s ease-out;
+            will-change: transform;
+            transform-origin: 50% 90%;
+        }
+
+        .creature.is-small svg {
+            width: 3.4rem;
+            height: auto;
+        }
+
+        .creature.is-large svg {
+            width: 4.6rem;
+            height: auto;
+        }
+
+        .creature .lid {
+            transform-box: fill-box;
+            transform-origin: center;
+            transform: scaleY(0);
+            animation: blink 5.5s infinite;
+        }
+
+        .creature:nth-child(2) .lid {
+            animation-delay: 2.7s;
+        }
+
+        @keyframes blink {
+            0%, 93%, 100% { transform: scaleY(0); }
+            95%, 97% { transform: scaleY(1); }
+        }
+
+        @keyframes bob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .creature,
+            .creature .lid {
+                animation: none;
+            }
         }
 
         .tv_screen {
@@ -659,13 +794,25 @@
     <div class="navigation">
         <div class="nav_pill">
             <a class="nav_home" href="./">
-                <img src="logo-mark-dark.png" alt="VastBrowser logo">
+                <img class="only-light" src="logo-mark-dark.png" alt="VastBrowser logo">
+                <img class="only-dark" src="logo-mark-light.png" alt="VastBrowser logo">
                 VastBrowser
             </a>
             <div class="nav_menu">
                 <a class="nav_link" href="#features">Features</a>
                 <a class="nav_link" href="#downloads">Downloads</a>
                 <a class="nav_link" href="/apps/">All apps</a>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+                    <svg class="only-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4.5" />
+                        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5m14 0h2.5M4.9 4.9l1.8 1.8m10.6 10.6l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" />
+                    </svg>
+                    <svg class="only-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.5 14.5A8.5 8.5 0 019.5 3.5a8.5 8.5 0 1011 11z" />
+                    </svg>
+                </button>
                 <a class="button is-primary is-small" data-flavor="VastBrowser-arm64-v8a"
                     href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-arm64-v8a.apk">Download</a>
             </div>
@@ -700,7 +847,93 @@
                 </div>
 
                 <div class="hero_media" data-animate>
-                    <div class="tv_screen"><img src="banner.png" alt="VastBrowser running on a TV"></div>
+                    <div class="perch" aria-hidden="true">
+                        <span class="creature is-small">
+                            <!-- owl (dark theme) — canonical: design/creatures/owl.svg -->
+                            <svg class="only-dark" viewBox="0 0 120 130">
+                                <path d="M30 24 L40 6 L50 26 Z" fill="#b9a6ff" />
+                                <path d="M90 24 L80 6 L70 26 Z" fill="#b9a6ff" />
+                                <ellipse cx="60" cy="72" rx="40" ry="50" fill="#b9a6ff" />
+                                <path d="M22 62 Q12 92 26 108 Q34 96 32 70 Z" fill="#a08cf0" />
+                                <path d="M98 62 Q108 92 94 108 Q86 96 88 70 Z" fill="#a08cf0" />
+                                <ellipse cx="60" cy="96" rx="23" ry="24" fill="#ebf0f8" />
+                                <g class="eye">
+                                    <circle cx="44" cy="52" r="13" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                                    <circle class="pupil" cx="44" cy="52" r="5.5" fill="#1f2025" />
+                                    <circle class="lid" cx="44" cy="52" r="13" fill="#b9a6ff" />
+                                </g>
+                                <g class="eye">
+                                    <circle cx="76" cy="52" r="13" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                                    <circle class="pupil" cx="76" cy="52" r="5.5" fill="#1f2025" />
+                                    <circle class="lid" cx="76" cy="52" r="13" fill="#b9a6ff" />
+                                </g>
+                                <path d="M60 62 L53 72 L67 72 Z" fill="#ffab94" />
+                                <path d="M48 121 l-4 7 M48 121 l0 8 M48 121 l4 7" stroke="#ffab94" stroke-width="2.5"
+                                    stroke-linecap="round" fill="none" />
+                                <path d="M72 121 l-4 7 M72 121 l0 8 M72 121 l4 7" stroke="#ffab94" stroke-width="2.5"
+                                    stroke-linecap="round" fill="none" />
+                            </svg>
+                            <!-- bird (light theme) — canonical: design/creatures/bird.svg -->
+                            <svg class="only-light" viewBox="0 0 120 110">
+                                <path d="M28 78 Q10 70 6 84 Q18 88 28 86 Z" fill="#b9a6ff" />
+                                <ellipse cx="58" cy="70" rx="34" ry="30" fill="#7ddcff" />
+                                <ellipse cx="60" cy="82" rx="20" ry="15" fill="#ffffff" />
+                                <circle cx="78" cy="40" r="22" fill="#7ddcff" />
+                                <path d="M52 66 Q34 74 40 88 Q56 88 62 76 Z" fill="#b9a6ff" />
+                                <g class="eye">
+                                    <circle cx="84" cy="36" r="9" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                                    <circle class="pupil" cx="84" cy="36" r="3.8" fill="#1f2025" />
+                                    <circle class="lid" cx="84" cy="36" r="9" fill="#7ddcff" />
+                                </g>
+                                <path d="M99 34 L112 40 L99 46 Z" fill="#ffab94" />
+                                <path d="M48 99 l0 8 M48 103 l-5 5 M70 99 l0 8 M70 103 l5 5" stroke="#1f2025"
+                                    stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            </svg>
+                        </span>
+                        <span class="creature is-large">
+                            <svg class="only-dark" viewBox="0 0 120 130">
+                                <path d="M30 24 L40 6 L50 26 Z" fill="#b9a6ff" />
+                                <path d="M90 24 L80 6 L70 26 Z" fill="#b9a6ff" />
+                                <ellipse cx="60" cy="72" rx="40" ry="50" fill="#b9a6ff" />
+                                <path d="M22 62 Q12 92 26 108 Q34 96 32 70 Z" fill="#a08cf0" />
+                                <path d="M98 62 Q108 92 94 108 Q86 96 88 70 Z" fill="#a08cf0" />
+                                <ellipse cx="60" cy="96" rx="23" ry="24" fill="#ebf0f8" />
+                                <g class="eye">
+                                    <circle cx="44" cy="52" r="13" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                                    <circle class="pupil" cx="44" cy="52" r="5.5" fill="#1f2025" />
+                                    <circle class="lid" cx="44" cy="52" r="13" fill="#b9a6ff" />
+                                </g>
+                                <g class="eye">
+                                    <circle cx="76" cy="52" r="13" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                                    <circle class="pupil" cx="76" cy="52" r="5.5" fill="#1f2025" />
+                                    <circle class="lid" cx="76" cy="52" r="13" fill="#b9a6ff" />
+                                </g>
+                                <path d="M60 62 L53 72 L67 72 Z" fill="#ffab94" />
+                                <path d="M48 121 l-4 7 M48 121 l0 8 M48 121 l4 7" stroke="#ffab94" stroke-width="2.5"
+                                    stroke-linecap="round" fill="none" />
+                                <path d="M72 121 l-4 7 M72 121 l0 8 M72 121 l4 7" stroke="#ffab94" stroke-width="2.5"
+                                    stroke-linecap="round" fill="none" />
+                            </svg>
+                            <svg class="only-light" viewBox="0 0 120 110" style="transform: scaleX(-1)">
+                                <path d="M28 78 Q10 70 6 84 Q18 88 28 86 Z" fill="#b9a6ff" />
+                                <ellipse cx="58" cy="70" rx="34" ry="30" fill="#7ddcff" />
+                                <ellipse cx="60" cy="82" rx="20" ry="15" fill="#ffffff" />
+                                <circle cx="78" cy="40" r="22" fill="#7ddcff" />
+                                <path d="M52 66 Q34 74 40 88 Q56 88 62 76 Z" fill="#b9a6ff" />
+                                <g class="eye">
+                                    <circle cx="84" cy="36" r="9" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                                    <circle class="pupil" cx="84" cy="36" r="3.8" fill="#1f2025" />
+                                    <circle class="lid" cx="84" cy="36" r="9" fill="#7ddcff" />
+                                </g>
+                                <path d="M99 34 L112 40 L99 46 Z" fill="#ffab94" />
+                                <path d="M48 99 l0 8 M48 103 l-5 5 M70 99 l0 8 M70 103 l5 5" stroke="#1f2025"
+                                    stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="tv_wrap">
+                        <div class="tv_screen"><img src="banner.png" alt="VastBrowser running on a TV"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -870,7 +1103,8 @@
         <div class="container">
             <div class="foot-card" data-animate>
                 <div>
-                    <img class="wordmark" src="logo-full-dark.png" alt="VastBrowser">
+                    <img class="wordmark only-light" src="logo-full-dark.png" alt="VastBrowser">
+                    <img class="wordmark only-dark" src="logo-full-light.png" alt="VastBrowser">
                     <p class="about">Built by Mango Developers — a passionate group of software developers creating
                         awesome stuff.</p>
                 </div>
@@ -937,6 +1171,46 @@
                 });
             }, { threshold: 0.15 });
             document.querySelectorAll('[data-animate]').forEach(function (el) { io.observe(el); });
+
+            // Theme toggle (dark is default; persisted in localStorage)
+            document.getElementById('theme-toggle').addEventListener('click', function () {
+                var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = next;
+                try { localStorage.setItem('vb-theme', next); } catch (e) { }
+            });
+
+            // Mascots: pupils track the cursor, whole creature tilts toward it
+            var pupils = [].slice.call(document.querySelectorAll('.creature .pupil'));
+            var bodies = [].slice.call(document.querySelectorAll('.creature svg'));
+            var mx = -1, my = -1, raf = null;
+
+            function track() {
+                raf = null;
+                pupils.forEach(function (p) {
+                    var r = p.getBoundingClientRect();
+                    if (!r.width) return; // hidden theme variant
+                    var dx = mx - (r.left + r.width / 2);
+                    var dy = my - (r.top + r.height / 2);
+                    var d = Math.hypot(dx, dy) || 1;
+                    var reach = 4; // svg units
+                    var k = (Math.min(d, 240) / 240) * reach / d;
+                    p.setAttribute('transform', 'translate(' + (dx * k).toFixed(2) + ' ' + (dy * k).toFixed(2) + ')');
+                });
+                bodies.forEach(function (s) {
+                    var r = s.getBoundingClientRect();
+                    if (!r.width) return;
+                    var dx = mx - (r.left + r.width / 2);
+                    var rot = Math.max(-7, Math.min(7, dx / 80));
+                    var flip = s.style.transform.indexOf('scaleX(-1)') !== -1 || s.getAttribute('style') === 'transform: scaleX(-1)';
+                    s.style.transform = (flip ? 'scaleX(-1) ' : '') + 'rotate(' + (flip ? -rot : rot).toFixed(1) + 'deg)';
+                });
+            }
+
+            window.addEventListener('pointermove', function (e) {
+                mx = e.clientX;
+                my = e.clientY;
+                if (!raf) raf = requestAnimationFrame(track);
+            }, { passive: true });
         })();
     </script>
 </body>

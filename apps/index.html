@@ -7,6 +7,15 @@
     <meta name="description" content="Apps by Mango Developers — free software, built with care.">
     <title>Our Apps | Mango Developers</title>
 
+    <!-- Theme is applied before first paint to avoid a flash. Dark is default. -->
+    <script>
+        (function () {
+            var t = 'dark';
+            try { t = localStorage.getItem('vb-theme') || 'dark'; } catch (e) { }
+            document.documentElement.dataset.theme = t;
+        })();
+    </script>
+
     <!-- Google tag (gtag.js) — same property as the rest of mangodevelopers.com -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVE8EH4YDB"></script>
     <script>
@@ -39,10 +48,34 @@
             --ink-60: #1f202599;
             --light: #ebf0f8;
             --white: #ffffff;
+            --nav-bg: #fff9;
+            --hero-a: #d2e5ff;
+            --hero-b: #fff9ee;
+            --dash: #1f202526;
             --coral: #ffab94;
             --cyan: #7ddcff;
             --heading: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
             --body-font: -apple-system, BlinkMacSystemFont, Inter, 'Segoe UI', sans-serif;
+        }
+
+        html[data-theme="dark"] {
+            --bg: #131417;
+            --ink: #ebf0f8;
+            --ink-60: #ebf0f899;
+            --light: #2a2d35;
+            --white: #1f2025;
+            --nav-bg: #1f202599;
+            --hero-a: #1d2947;
+            --hero-b: #372a20;
+            --dash: #ebf0f826;
+        }
+
+        html[data-theme="dark"] .only-light {
+            display: none !important;
+        }
+
+        html[data-theme="light"] .only-dark {
+            display: none !important;
         }
 
         body {
@@ -90,9 +123,34 @@
             gap: 2.5rem;
             -webkit-backdrop-filter: blur(.75rem);
             backdrop-filter: blur(.75rem);
-            background-color: #fff9;
+            background-color: var(--nav-bg);
             border-radius: 2rem;
             padding: .5rem 1.25rem;
+            transition: background-color .3s;
+        }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+            border: 1px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer;
+            transition: background-color .2s, color .2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--ink);
+            color: var(--white);
+        }
+
+        .theme-toggle svg {
+            width: 1.05rem;
+            height: 1.05rem;
         }
 
         .nav_home {
@@ -123,12 +181,49 @@
 
         /* Header panel */
         .head_panel {
-            background-image: linear-gradient(#d2e5ff, #fff9ee);
+            background-image: linear-gradient(var(--hero-a), var(--hero-b));
             border-radius: 1.5rem;
             width: calc(100% - 1rem);
             margin: .5rem auto 0;
             padding: 8rem 1.5rem 4rem;
             text-align: center;
+            position: relative;
+            transition: background-image .3s;
+        }
+
+        /* Perched mascot (owl in dark, bird in light) */
+        .perch {
+            position: absolute;
+            bottom: 0;
+            right: 12%;
+            pointer-events: none;
+        }
+
+        .creature svg {
+            display: block;
+            width: 3.6rem;
+            height: auto;
+            transition: transform .25s ease-out;
+            will-change: transform;
+            transform-origin: 50% 90%;
+        }
+
+        .creature .lid {
+            transform-box: fill-box;
+            transform-origin: center;
+            transform: scaleY(0);
+            animation: blink 5.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 93%, 100% { transform: scaleY(0); }
+            95%, 97% { transform: scaleY(1); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .creature .lid {
+                animation: none;
+            }
         }
 
         .eyebrow {
@@ -237,7 +332,7 @@
 
         .coming {
             text-align: center;
-            border: 2px dashed #1f202526;
+            border: 2px dashed var(--dash);
             border-radius: 2rem;
             padding: 2rem;
             color: var(--ink-60);
@@ -307,6 +402,17 @@
         <div class="nav_pill">
             <a class="nav_home" href="/">Mango Developers</a>
             <a class="nav_link" href="/">Home</a>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+                <svg class="only-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="4.5" />
+                    <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5m14 0h2.5M4.9 4.9l1.8 1.8m10.6 10.6l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" />
+                </svg>
+                <svg class="only-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.5 14.5A8.5 8.5 0 019.5 3.5a8.5 8.5 0 1011 11z" />
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -314,6 +420,50 @@
         <div class="eyebrow" data-animate>Mango Developers</div>
         <h1 data-animate>Our apps</h1>
         <p data-animate>Free software we build and maintain — every release published openly on GitHub.</p>
+        <div class="perch" aria-hidden="true">
+            <span class="creature">
+                <!-- owl (dark theme) — canonical: design/creatures/owl.svg -->
+                <svg class="only-dark" viewBox="0 0 120 130">
+                    <path d="M30 24 L40 6 L50 26 Z" fill="#b9a6ff" />
+                    <path d="M90 24 L80 6 L70 26 Z" fill="#b9a6ff" />
+                    <ellipse cx="60" cy="72" rx="40" ry="50" fill="#b9a6ff" />
+                    <path d="M22 62 Q12 92 26 108 Q34 96 32 70 Z" fill="#a08cf0" />
+                    <path d="M98 62 Q108 92 94 108 Q86 96 88 70 Z" fill="#a08cf0" />
+                    <ellipse cx="60" cy="96" rx="23" ry="24" fill="#ebf0f8" />
+                    <g class="eye">
+                        <circle cx="44" cy="52" r="13" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                        <circle class="pupil" cx="44" cy="52" r="5.5" fill="#1f2025" />
+                        <circle class="lid" cx="44" cy="52" r="13" fill="#b9a6ff" />
+                    </g>
+                    <g class="eye">
+                        <circle cx="76" cy="52" r="13" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                        <circle class="pupil" cx="76" cy="52" r="5.5" fill="#1f2025" />
+                        <circle class="lid" cx="76" cy="52" r="13" fill="#b9a6ff" />
+                    </g>
+                    <path d="M60 62 L53 72 L67 72 Z" fill="#ffab94" />
+                    <path d="M48 121 l-4 7 M48 121 l0 8 M48 121 l4 7" stroke="#ffab94" stroke-width="2.5"
+                        stroke-linecap="round" fill="none" />
+                    <path d="M72 121 l-4 7 M72 121 l0 8 M72 121 l4 7" stroke="#ffab94" stroke-width="2.5"
+                        stroke-linecap="round" fill="none" />
+                </svg>
+                <!-- bird (light theme) — canonical: design/creatures/bird.svg -->
+                <svg class="only-light" viewBox="0 0 120 110">
+                    <path d="M28 78 Q10 70 6 84 Q18 88 28 86 Z" fill="#b9a6ff" />
+                    <ellipse cx="58" cy="70" rx="34" ry="30" fill="#7ddcff" />
+                    <ellipse cx="60" cy="82" rx="20" ry="15" fill="#ffffff" />
+                    <circle cx="78" cy="40" r="22" fill="#7ddcff" />
+                    <path d="M52 66 Q34 74 40 88 Q56 88 62 76 Z" fill="#b9a6ff" />
+                    <g class="eye">
+                        <circle cx="84" cy="36" r="9" fill="#ffffff" stroke="#1f2025" stroke-width="2" />
+                        <circle class="pupil" cx="84" cy="36" r="3.8" fill="#1f2025" />
+                        <circle class="lid" cx="84" cy="36" r="9" fill="#7ddcff" />
+                    </g>
+                    <path d="M99 34 L112 40 L99 46 Z" fill="#ffab94" />
+                    <path d="M48 99 l0 8 M48 103 l-5 5 M70 99 l0 8 M70 103 l5 5" stroke="#1f2025" stroke-width="2.5"
+                        stroke-linecap="round" fill="none" />
+                </svg>
+            </span>
+        </div>
     </div>
 
     <main class="container">
@@ -379,6 +529,45 @@
                 });
             }, { threshold: 0.15 });
             document.querySelectorAll('[data-animate]').forEach(function (el) { io.observe(el); });
+
+            // Theme toggle (dark is default; persisted in localStorage)
+            document.getElementById('theme-toggle').addEventListener('click', function () {
+                var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = next;
+                try { localStorage.setItem('vb-theme', next); } catch (e) { }
+            });
+
+            // Mascot: pupils track the cursor, whole creature tilts toward it
+            var pupils = [].slice.call(document.querySelectorAll('.creature .pupil'));
+            var bodies = [].slice.call(document.querySelectorAll('.creature svg'));
+            var mx = -1, my = -1, raf = null;
+
+            function track() {
+                raf = null;
+                pupils.forEach(function (p) {
+                    var r = p.getBoundingClientRect();
+                    if (!r.width) return; // hidden theme variant
+                    var dx = mx - (r.left + r.width / 2);
+                    var dy = my - (r.top + r.height / 2);
+                    var d = Math.hypot(dx, dy) || 1;
+                    var reach = 4; // svg units
+                    var k = (Math.min(d, 240) / 240) * reach / d;
+                    p.setAttribute('transform', 'translate(' + (dx * k).toFixed(2) + ' ' + (dy * k).toFixed(2) + ')');
+                });
+                bodies.forEach(function (s) {
+                    var r = s.getBoundingClientRect();
+                    if (!r.width) return;
+                    var dx = mx - (r.left + r.width / 2);
+                    var rot = Math.max(-7, Math.min(7, dx / 80));
+                    s.style.transform = 'rotate(' + rot.toFixed(1) + 'deg)';
+                });
+            }
+
+            window.addEventListener('pointermove', function (e) {
+                mx = e.clientX;
+                my = e.clientY;
+                if (!raf) raf = requestAnimationFrame(track);
+            }, { passive: true });
         })();
     </script>
 </body>
