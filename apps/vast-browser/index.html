@@ -478,6 +478,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
             gap: 1.25rem;
+            max-width: 34rem;
+            margin: 0 auto;
         }
 
         .dl-card {
@@ -746,9 +748,9 @@
                                 <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 000 18M12 3a14.5 14.5 0 010 18" />
                             </svg>
                         </span>
-                        <h3>Real browser engine</h3>
-                        <p>Powered by Mozilla's browser components — the same technology behind Firefox — not a
-                            wrapped mini-view.</p>
+                        <h3>Modern browser architecture</h3>
+                        <p>Built on Mozilla's Android Components with your TV's native WebView engine — a real
+                            browser, not a wrapped mini-view.</p>
                     </div>
                     <div class="card" data-animate>
                         <span class="icon-chip tint-lilac">
@@ -758,21 +760,20 @@
                                 <path d="M9 12l2.2 2.2L15.5 9.5" />
                             </svg>
                         </span>
-                        <h3>Ad blocking (Pro)</h3>
-                        <p>The Pro flavor supports content-blocking extensions like uBlock Origin for a cleaner,
+                        <h3>Built-in ad blocking</h3>
+                        <p>Ships with uBlock Origin and Privacy Badger content blocking preloaded for a cleaner,
                             faster web on your TV.</p>
                     </div>
                     <div class="card" data-animate>
                         <span class="icon-chip tint-mint">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 3l9 5-9 5-9-5 9-5z" />
-                                <path d="M3 13l9 5 9-5" />
+                                <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
                             </svg>
                         </span>
-                        <h3>Two flavors</h3>
-                        <p>Choose the lightweight WebView build, or the Pro build with Mozilla's full GeckoView
-                            engine bundled in.</p>
+                        <h3>Extremely lightweight</h3>
+                        <p>A tiny ~2 MB download that runs smoothly even on low-resource streaming sticks like the
+                            Fire TV Stick Lite.</p>
                     </div>
                     <div class="card" data-animate>
                         <span class="icon-chip tint-blue">
@@ -783,8 +784,8 @@
                             </svg>
                         </span>
                         <h3>Frequent updates</h3>
-                        <p>Engine updates land automatically as Mozilla ships them, and every release is published
-                            free on GitHub.</p>
+                        <p>New releases ship frequently and every one is published free on GitHub, while the engine
+                            stays current with your TV's system WebView updates.</p>
                     </div>
                     <div class="card" data-animate>
                         <span class="icon-chip tint-light">
@@ -805,32 +806,20 @@
             <section class="section" id="downloads">
                 <div class="section-header">
                     <div class="eyebrow" data-animate>Downloads</div>
-                    <h2 data-animate>Pick your flavor</h2>
+                    <h2 data-animate>Get VastBrowser</h2>
                     <p data-animate>Most Android TV and Fire TV devices are arm64; older Fire TV sticks are arm v7.
                     </p>
                 </div>
                 <div class="dl-grid">
                     <div class="dl-card" data-animate>
-                        <div class="eyebrow">Lightweight</div>
+                        <div class="eyebrow">Free download</div>
                         <h3>VastBrowser</h3>
-                        <p>Uses your TV's built-in WebView engine. Smallest download, great for most sites.</p>
+                        <p>Uses your TV's built-in WebView engine. Tiny download, great for most sites.</p>
                         <div class="dl-row">
                             <a class="button is-primary is-small" data-flavor="VastBrowser-arm64-v8a"
                                 href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-arm64-v8a.apk">arm64</a>
                             <a class="button is-secondary is-small" data-flavor="VastBrowser-armeabi-v7a"
                                 href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-armeabi-v7a.apk">arm
-                                v7</a>
-                        </div>
-                    </div>
-                    <div class="dl-card" data-animate>
-                        <div class="eyebrow">Full engine</div>
-                        <h3>VastBrowser Pro</h3>
-                        <p>Bundles Mozilla's GeckoView engine and supports extensions like uBlock Origin.</p>
-                        <div class="dl-row">
-                            <a class="button is-primary is-small" data-flavor="VastBrowser-Pro-arm64-v8a"
-                                href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-Pro-arm64-v8a.apk">arm64</a>
-                            <a class="button is-secondary is-small" data-flavor="VastBrowser-Pro-armeabi-v7a"
-                                href="https://github.com/MangoDevelopers/vast-browser-release/releases/latest/download/VastBrowser-Pro-armeabi-v7a.apk">arm
                                 v7</a>
                         </div>
                     </div>
