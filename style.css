@@ -540,3 +540,63 @@ body.light-theme .apps-button:hover {
   border-color: #0097a7;
   color: #0097a7;
 }
+
+/* Built-with-love credit line */
+.built-with {
+  margin-top: 24px;
+  text-align: center;
+  width: 100%;
+  font-size: 0.85em;
+  color: var(--text-color);
+  opacity: 0.75;
+}
+
+.built-with a {
+  color: #00bcd4;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.built-with a:hover {
+  text-decoration: underline;
+}
+
+/* --- Interactive terminal --- */
+.shell-body {
+  cursor: text;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* invisible input that captures keystrokes (needed for mobile keyboards) */
+#shell-stdin {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  border: none;
+  padding: 0;
+  pointer-events: none;
+}
+
+.hint {
+  color: #ffbd2e;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+.shell-link {
+  color: var(--prompt-color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.shell-link:hover {
+  color: var(--social-link-hover-color);
+}
+
+body.light-theme .hint {
+  color: #b8860b;
+}

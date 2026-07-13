@@ -1,327 +1,561 @@
 document.addEventListener('DOMContentLoaded', () => {
     const shellOutput = document.getElementById('shell-output');
     const cursor = document.querySelector('.cursor');
-    const body = document.body; // Keep body reference
-    // --- Text Content for the Shell ---
-    // Use spans with classes for potential coloring (optional, but nice)
-    // Use \n for new lines
-    const lines = [
-        { text: '\n> whoami', type: 'command', delayAfter: 500 },
+    const stdin = document.getElementById('shell-stdin');
+    const shellBody = document.querySelector('.shell-body');
+    const body = document.body;
+
+    /* ============================================================
+       Interactive terminal
+       Intro sequence types itself, then hands over a live prompt.
+       ============================================================ */
+
+    const PROMPT = 'mango@mangodevelopers:~$ ';
+    const EMAIL = 'admin@mangodevelopers.com';
+
+    const introLines = [
+        { text: '\n> whoami', type: 'command', delayAfter: 400 },
         { text: '\nmango_developers\n', type: 'output', delayAfter: 200 },
-        { text: '> pwd', type: 'command', delayAfter: 500 },
-        { text: '\n/home/mango_developers\n', type: 'output', delayAfter: 200 },
-        { text: '> cat README.md', type: 'command', delayAfter: 500 },
-        { text: '\n---\n', type: 'output', delayAfter: 0 },
-        { text: '# Welcome to Mango Developers!\n', type: 'output', delayAfter: 50 },
+        { text: '> cat README.md', type: 'command', delayAfter: 400 },
+        { text: '\n# Welcome to Mango Developers!\n', type: 'output', delayAfter: 50 },
         { text: 'We are a passionate group of software developers creating awesome stuff.\n', type: 'output', delayAfter: 50 },
-        { text: 'We love coding, collaboration, and of course, the mango feeling!\n', type: 'output', delayAfter: 50 },
-        { text: '\nFind our work and connect with us via the links below.\n', type: 'output', delayAfter: 50 },
-        { text: '---\n', type: 'output', delayAfter: 500 },
-        { text: '> echo $WHAT_IS_MANGO', type: 'command', delayAfter: 500 },
-        { text: '\nWhat is Mango?\n', type: 'output', delayAfter: 150 },
-        { text: 'A sweet feeling that cannot be expressed in words,\nbut can still be shared with everyone.\n', type: 'output', delayAfter: 1000 }, // Longer pause at the end
-        { text: '> ', type: 'command', delayAfter: 0 } // Final prompt
+        { text: 'We love coding, collaboration, and of course, the mango feeling!\n\n', type: 'output', delayAfter: 300 },
+        { text: 'This terminal is real — type ', type: 'output', delayAfter: 0 },
+        { text: 'help', type: 'hint', delayAfter: 0 },
+        { text: ' and press Enter.\n', type: 'output', delayAfter: 300 },
     ];
-    // ------------------------------------
 
+    // ---------- printing helpers ----------
+    function print(text, cls) {
+        const span = document.createElement('span');
+        if (cls) span.className = cls;
+        span.textContent = text;
+        shellOutput.insertBefore(span, cursor);
+        scrollToBottom();
+    }
 
+    function printLink(text, url, external) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.textContent = text;
+        a.className = 'shell-link';
+        if (external) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+        shellOutput.insertBefore(a, cursor);
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        shellBody.scrollTop = shellBody.scrollHeight;
+    }
+
+    // ---------- intro typewriter ----------
     let lineIndex = 0;
     let charIndex = 0;
-    const typingSpeed = 60; // Milliseconds per character
+    const typingSpeed = 45;
+    let interactive = false;
 
     function typeCharacter() {
-        if (lineIndex >= lines.length) {
-            cursor.style.animation = 'blink 1s step-end infinite'; // Ensure cursor keeps blinking
-            return; // Stop typing if all lines are done
+        if (lineIndex >= introLines.length) {
+            startInteractive();
+            return;
         }
-
-        const currentLine = lines[lineIndex];
-        const textToType = currentLine.text;
-
-        // Create a span for styling if needed (optional)
-        // const span = document.createElement('span');
-        // if (currentLine.type) {
-        //     span.className = currentLine.type; // Add class 'command' or 'output'
-        // }
-        // span.textContent = textToType[charIndex];
-        // shellOutput.appendChild(span);
-
-        // Insert character *before* the cursor span
-        const char = textToType[charIndex];
-        const textNode = document.createTextNode(char);
-        shellOutput.insertBefore(textNode, cursor);
-
+        const currentLine = introLines[lineIndex];
+        print(currentLine.text[charIndex], currentLine.type);
         charIndex++;
-
-        // Move to the next line?
-        if (charIndex >= textToType.length) {
+        if (charIndex >= currentLine.text.length) {
             lineIndex++;
             charIndex = 0;
-            // Use the delay specified for the line, or default
-            const delay = currentLine.delayAfter || 200;
-            setTimeout(typeCharacter, delay);
+            setTimeout(typeCharacter, currentLine.delayAfter || 150);
         } else {
-            // Continue typing characters in the current line
             setTimeout(typeCharacter, typingSpeed);
         }
     }
 
-    // Hide cursor during initial setup (optional, prevents seeing it jump)
-    // cursor.style.visibility = 'hidden';
-
-    // Start the typing animation after a short delay
     setTimeout(() => {
-       // cursor.style.visibility = 'visible';
-       cursor.style.animation = 'none'; // Stop blinking during typing
-       typeCharacter();
-    }, 1000); // 1 second delay before starting
+        cursor.style.animation = 'none';
+        typeCharacter();
+    }, 800);
 
+    // Let visitors skip the intro
+    function skipIntro() {
+        if (interactive || lineIndex >= introLines.length) return;
+        // flush the remaining intro instantly
+        let rest = introLines[lineIndex].text.slice(charIndex);
+        print(rest, introLines[lineIndex].type);
+        for (let i = lineIndex + 1; i < introLines.length; i++) {
+            print(introLines[i].text, introLines[i].type);
+        }
+        lineIndex = introLines.length;
+    }
 
-    // --- Theme Toggle Logic (from web.dev, adapted) ---
+    // ---------- live prompt ----------
+    let inputSpan = null;
+    let buffer = '';
+    const history = [];
+    let histIdx = -1;
+    let pendingMailto = null;
+
+    function newPrompt() {
+        print(PROMPT, 'prompt');
+        inputSpan = document.createElement('span');
+        inputSpan.className = 'command';
+        shellOutput.insertBefore(inputSpan, cursor);
+        buffer = '';
+        cursor.style.animation = 'blink 1s step-end infinite';
+        scrollToBottom();
+    }
+
+    function startInteractive() {
+        interactive = true;
+        newPrompt();
+        // focus so people can type right away (desktop only — avoid
+        // popping the keyboard on phones until they tap the shell)
+        if (window.matchMedia('(hover: hover)').matches) stdin.focus();
+    }
+
+    function renderBuffer() {
+        inputSpan.textContent = buffer;
+        scrollToBottom();
+    }
+
+    const COMMANDS = {
+        help: () => {
+            print('Available commands:\n', 'output');
+            [
+                ['help', 'show this help'],
+                ['about', 'who we are'],
+                ['apps', 'list the apps we build'],
+                ['open <app>', 'jump to an app page, e.g. open vast-browser'],
+                ['contact', 'get in touch — opens your mail app'],
+                ['social', 'where to follow us'],
+                ['theme', 'toggle light/dark mode'],
+                ['ls / cat', 'poke around the filesystem'],
+                ['history', 'your command history'],
+                ['clear', 'wipe the screen'],
+            ].forEach(([c, d]) => {
+                print('  ' + c.padEnd(14), 'hint');
+                print(d + '\n', 'output');
+            });
+            print('...and a few things help does not mention.\n', 'output');
+        },
+        about: () => {
+            print('Mango Developers — a passionate group of software developers\n' +
+                'creating awesome stuff. We build free, open software and publish\n' +
+                'every release on GitHub.\n', 'output');
+        },
+        apps: () => {
+            print('our apps:\n', 'output');
+            print('  VastBrowser  ', 'hint');
+            print('web browser for Android TV & Fire TV — ', 'output');
+            printLink('/apps/vast-browser/', '/apps/vast-browser/');
+            print('\nmore on the way. Run ', 'output');
+            print('open vast-browser', 'hint');
+            print(' or see ', 'output');
+            printLink('/apps/', '/apps/');
+            print('\n', 'output');
+        },
+        open: (args) => {
+            const target = (args[0] || '').toLowerCase();
+            if (target === 'vast-browser' || target === 'vastbrowser') {
+                print('opening /apps/vast-browser/ ...\n', 'output');
+                setTimeout(() => { window.location.href = '/apps/vast-browser/'; }, 400);
+            } else if (target === 'apps') {
+                print('opening /apps/ ...\n', 'output');
+                setTimeout(() => { window.location.href = '/apps/'; }, 400);
+            } else {
+                print('open: unknown app "' + target + '" — try open vast-browser\n', 'error');
+            }
+        },
+        contact: () => {
+            print('reach us at ', 'output');
+            printLink(EMAIL, 'mailto:' + EMAIL + '?subject=Hello%20Mango%20Developers');
+            print('\nopening your mail app', 'output');
+            let dots = 0;
+            const iv = setInterval(() => {
+                print('.', 'output');
+                if (++dots >= 3) {
+                    clearInterval(iv);
+                    print('\n', 'output');
+                    window.location.href = 'mailto:' + EMAIL + '?subject=Hello%20Mango%20Developers';
+                    newPrompt();
+                }
+            }, 300);
+            return 'async';
+        },
+        email: (a) => COMMANDS.contact(a),
+        social: () => {
+            print('follow us:\n  GitHub     ', 'output');
+            printLink('github.com/mangodevelopers', 'https://github.com/mangodevelopers', true);
+            print('\n  Instagram  ', 'output');
+            printLink('instagram.com/mangodevs', 'https://instagram.com/mangodevs', true);
+            print('\n  Twitter/X  ', 'output');
+            printLink('twitter.com/mangodevs', 'https://twitter.com/mangodevs', true);
+            print('\n', 'output');
+        },
+        follow: (a) => COMMANDS.social(a),
+        whoami: () => print('mango_developers\n', 'output'),
+        pwd: () => print('/home/mango_developers\n', 'output'),
+        ls: () => {
+            print('apps/  README.md  contact.txt  mango.txt\n', 'output');
+        },
+        cat: (args) => {
+            const f = args[0] || '';
+            if (f === 'README.md') COMMANDS.about();
+            else if (f === 'contact.txt') {
+                print('email: ', 'output');
+                printLink(EMAIL, 'mailto:' + EMAIL);
+                print('\n(or just run: contact)\n', 'output');
+            }
+            else if (f === 'mango.txt') COMMANDS.mango();
+            else if (f === '') print('cat: missing file — try cat README.md\n', 'error');
+            else print('cat: ' + f + ': No such file or directory\n', 'error');
+        },
+        echo: (args, raw) => print(raw.replace(/^echo\s?/, '') + '\n', 'output'),
+        date: () => print(new Date().toString() + '\n', 'output'),
+        theme: () => {
+            document.getElementById('theme-toggle').click();
+            print('theme toggled — easy on the eyes.\n', 'output');
+        },
+        history: () => {
+            history.forEach((h, i) => print('  ' + (i + 1) + '  ' + h + '\n', 'output'));
+        },
+        clear: () => {
+            while (shellOutput.firstChild && shellOutput.firstChild !== cursor) {
+                shellOutput.removeChild(shellOutput.firstChild);
+            }
+        },
+        mango: () => {
+            print('        _\n' +
+                '      _(_)_        the mango feeling:\n' +
+                "    .-'   '-.      a sweet feeling that cannot be\n" +
+                '   /         \\     expressed in words, but can\n' +
+                '  |  o     o  |    still be shared with everyone.\n' +
+                '   \\   \\_/   /\n' +
+                "    '-.___.-'\n", 'hint');
+        },
+        sudo: () => print('mango_developers is not in the sudoers file.\nThis incident will be reported. 🥭\n', 'error'),
+        exit: () => print("there's no escape from the mango feeling. Try 'contact' instead.\n", 'output'),
+        matrix: () => {
+            print('wake up, Neo... (10 seconds)\n', 'hint');
+            if (window.__asciiMatrix) window.__asciiMatrix(10000);
+        },
+        rm: (args, raw) => {
+            if (/-rf?\s+\/(\s|$)/.test(raw)) {
+                print('nice try. deleting the mango feeling', 'error');
+                let n = 0;
+                const iv = setInterval(() => {
+                    print('.', 'error');
+                    if (++n >= 3) {
+                        clearInterval(iv);
+                        print(' permission denied ❤️\n', 'error');
+                        newPrompt();
+                    }
+                }, 350);
+                return 'async';
+            }
+            print('rm: refusing to remove anything — this is a happy place\n', 'error');
+        },
+    };
+
+    function runCommand(raw) {
+        const trimmed = raw.trim();
+        print('\n', 'output');
+        if (trimmed) {
+            history.push(trimmed);
+            histIdx = history.length;
+            const parts = trimmed.split(/\s+/);
+            const cmd = parts[0].toLowerCase();
+            const fn = COMMANDS[cmd];
+            if (fn) {
+                const result = fn(parts.slice(1), trimmed);
+                if (result === 'async') return; // command calls newPrompt() itself
+            } else {
+                print('bash: ' + cmd + ": command not found — try 'help'\n", 'error');
+            }
+        }
+        newPrompt();
+    }
+
+    function completeBuffer() {
+        const parts = buffer.split(/\s+/);
+        if (parts.length > 1) return;
+        const matches = Object.keys(COMMANDS).filter(c => c.indexOf(parts[0].toLowerCase()) === 0 && parts[0]);
+        if (matches.length === 1) {
+            buffer = matches[0] + ' ';
+            renderBuffer();
+        } else if (matches.length > 1) {
+            print('\n' + matches.join('  ') + '\n', 'output');
+            newPrompt();
+            inputSpan.textContent = buffer;
+        }
+    }
+
+    function onKey(e) {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (!interactive) {
+            if (e.key === 'Enter') skipIntro();
+            return;
+        }
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const cmd = buffer;
+            inputSpan = null;
+            runCommand(cmd);
+        } else if (e.key === 'Backspace') {
+            e.preventDefault();
+            buffer = buffer.slice(0, -1);
+            renderBuffer();
+        } else if (e.key === 'ArrowUp') {
+            if (histIdx > 0) { histIdx--; buffer = history[histIdx]; renderBuffer(); }
+            e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+            if (histIdx < history.length - 1) { histIdx++; buffer = history[histIdx]; }
+            else { histIdx = history.length; buffer = ''; }
+            renderBuffer();
+            e.preventDefault();
+        } else if (e.key === 'Tab') {
+            completeBuffer();
+            e.preventDefault();
+        } else if (e.key.length === 1) {
+            e.preventDefault();
+            buffer += e.key;
+            renderBuffer();
+        }
+    }
+
+    stdin.addEventListener('keydown', onKey);
+    // Mobile browsers deliver text through input events instead of key events
+    stdin.addEventListener('input', () => {
+        if (!interactive || !inputSpan) { stdin.value = ''; return; }
+        if (stdin.value) {
+            buffer += stdin.value;
+            stdin.value = '';
+            renderBuffer();
+        }
+    });
+
+    shellBody.addEventListener('click', () => stdin.focus());
+    // typing anywhere on the page routes into the terminal
+    document.addEventListener('keydown', (e) => {
+        if (e.target === stdin) return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.key.length === 1 || ['Enter', 'Backspace', 'Tab', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+            stdin.focus();
+            onKey(e);
+        }
+    });
+
+    /* ============================================================
+       Theme toggle (web.dev pattern, unchanged behaviour)
+       ============================================================ */
     const storageKey = 'theme-preference';
 
     const onClick = () => {
-      // flip current value
-      theme.value = theme.value === 'light' ? 'dark' : 'light';
-      setPreference();
-    }
-
-    const getColorPreference = () => {
-      const storedPref = localStorage.getItem(storageKey);
-      if (storedPref) {
-        return storedPref;
-      }
-      // Use matchMedia to check system preference
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
-    const setPreference = () => {
-      localStorage.setItem(storageKey, theme.value);
-      reflectPreference();
-    }
-
-    const reflectPreference = () => {
-      // Toggle class on body instead of setting data-theme on html
-      body.classList.toggle('light-theme', theme.value === 'light');
-
-      // Update the button's aria-label
-      document
-        .querySelector('#theme-toggle')
-        ?.setAttribute('aria-label', theme.value);
-
-      // Re-initialize particles with new theme colors
-      // Ensure init() exists and is accessible in this scope
-      if (typeof init === 'function') {
-          init();
-      } else {
-          console.error("Particle init() function not found for theme change.");
-      }
-    }
-
-    // Initialize theme object
-    const theme = {
-      value: getColorPreference(),
+        theme.value = theme.value === 'light' ? 'dark' : 'light';
+        setPreference();
     };
 
-    // Set initial theme state early
+    const getColorPreference = () => {
+        const storedPref = localStorage.getItem(storageKey);
+        if (storedPref) return storedPref;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+
+    const setPreference = () => {
+        localStorage.setItem(storageKey, theme.value);
+        reflectPreference();
+    };
+
+    const reflectPreference = () => {
+        body.classList.toggle('light-theme', theme.value === 'light');
+        document.querySelector('#theme-toggle')?.setAttribute('aria-label', theme.value);
+        if (typeof init === 'function') init(); // recolor the ascii field
+    };
+
+    const theme = { value: getColorPreference() };
     reflectPreference();
 
-    // Add event listeners after DOM is fully loaded
-    // The 'DOMContentLoaded' listener ensures this runs correctly
     const themeToggleButton = document.querySelector('#theme-toggle');
-    if (themeToggleButton) {
-        themeToggleButton.addEventListener('click', onClick);
-    } else {
-        console.error("Theme toggle button #theme-toggle not found.");
-    }
+    if (themeToggleButton) themeToggleButton.addEventListener('click', onClick);
 
-    // Sync with system changes
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', ({ matches: isDark }) => {
-        theme.value = isDark ? 'dark' : 'light';
-        setPreference();
-      });
-    // --- End Theme Toggle Logic ---
-
+    window.matchMedia('(prefers-color-scheme: dark)')
+        .addEventListener('change', ({ matches: isDark }) => {
+            theme.value = isDark ? 'dark' : 'light';
+            setPreference();
+        });
 });
 
-// --- Particle Background Animation ---
+/* ============================================================
+   Interactive ASCII-art background
+   A character field driven by layered sine waves; the cursor
+   carries a glow, clicks ring outward as ripples, and `matrix`
+   flips it into green rain for a while.
+   ============================================================ */
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 
-let particlesArray;
+const RAMP = ' ·.:-=+*#%@';
+const CELL = 14;
+let cols = 0, rows = 0;
+let fieldColor = '#40E0D0';
+let t = 0;
+const mouse = { x: -1e4, y: -1e4 };
+const trail = [];   // fading glow points the cursor leaves behind
+const ripples = []; // expanding rings from clicks
+let matrixUntil = 0;
+let drops = [];
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Mouse position
-const mouse = {
-    x: null,
-    y: null,
-    radius: 100 // Interaction radius
-};
+function resizeField() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    cols = Math.ceil(canvas.width / CELL);
+    rows = Math.ceil(canvas.height / CELL);
+    drops = Array.from({ length: cols }, () => Math.random() * rows);
+}
 
-window.addEventListener('mousemove', (event) => {
-    mouse.x = event.clientX;
-    mouse.y = event.clientY;
+// Called on load and whenever the theme flips (name kept for the
+// theme-toggle hook above).
+function init() {
+    const cs = getComputedStyle(document.body);
+    fieldColor = cs.getPropertyValue('--shell-body-color').trim() || '#40E0D0';
+}
+
+window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    if (!reduceMotion) {
+        trail.push({ x: e.clientX, y: e.clientY, life: 1 });
+        if (trail.length > 24) trail.shift();
+    }
 });
 
-// Particle class
-class Particle {
-    constructor(x, y, size, color, weight) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.color = color;
-        this.weight = weight; // Use weight to influence speed slightly
-        // Assign random initial direction and speed
-        this.directionX = (Math.random() * 0.8) - 0.4; // Random horizontal velocity (-0.4 to 0.4)
-        this.directionY = (Math.random() * 0.8) - 0.4; // Random vertical velocity (-0.4 to 0.4)
+window.addEventListener('mouseout', () => {
+    mouse.x = -1e4;
+    mouse.y = -1e4;
+});
+
+window.addEventListener('click', (e) => {
+    // Ignore clicks on real UI so buttons don't ring the background
+    if (e.target.closest('a, button, .shell-container')) return;
+    ripples.push({ x: e.clientX, y: e.clientY, r: 0, life: 1 });
+});
+
+// `matrix` command hook
+window.__asciiMatrix = function (ms) {
+    matrixUntil = performance.now() + ms;
+};
+
+function fieldValue(px, py) {
+    const gx = px / CELL, gy = py / CELL;
+    // ambient layered waves — kept subtle so the cursor glow pops
+    let v = 0.10 * Math.sin(gx * 0.22 + t * 0.6) * Math.sin(gy * 0.19 - t * 0.4)
+        + 0.08 * Math.sin((gx + gy) * 0.09 + t * 0.25)
+        + 0.10;
+
+    // cursor glow
+    const dm = Math.hypot(px - mouse.x, py - mouse.y);
+    if (dm < 260) {
+        const g = 1 - dm / 260;
+        v += g * g * 1.1;
     }
 
-    // Method to draw individual particle
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
-        ctx.fill();
+    // trailing glow
+    for (let i = 0; i < trail.length; i++) {
+        const p = trail[i];
+        const d = Math.hypot(px - p.x, py - p.y);
+        if (d < 120) {
+            const g = (1 - d / 120) * p.life;
+            v += g * g * 0.5;
+        }
     }
 
-    // Check particle position, check mouse position, move the particle, draw the particle
-    update() {
-        // Boundary check (bounce off edges) - Do this first
-        if (this.x + this.size > canvas.width || this.x - this.size < 0) {
-            this.directionX = -this.directionX; // Reverse horizontal direction
+    // click ripples: bright expanding ring
+    for (let i = 0; i < ripples.length; i++) {
+        const rp = ripples[i];
+        const d = Math.hypot(px - rp.x, py - rp.y);
+        const band = Math.abs(d - rp.r);
+        if (band < 40) {
+            v += Math.exp(-(band * band) / 320) * rp.life * 0.9;
         }
-        if (this.y + this.size > canvas.height || this.y - this.size < 0) {
-            this.directionY = -this.directionY; // Reverse vertical direction
+    }
+    return v;
+}
+
+function drawField() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = CELL + 'px Consolas, Monaco, monospace';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = fieldColor;
+
+    const now = performance.now();
+    if (now < matrixUntil) {
+        drawMatrix();
+        return;
+    }
+
+    for (let cy = 0; cy < rows; cy++) {
+        const py = cy * CELL;
+        for (let cx = 0; cx < cols; cx++) {
+            const px = cx * CELL;
+            const v = fieldValue(px + CELL / 2, py + CELL / 2);
+            if (v < 0.06) continue;
+            const clamped = Math.min(1, v);
+            const idx = Math.min(RAMP.length - 1, Math.max(1, Math.round(clamped * (RAMP.length - 1))));
+            ctx.globalAlpha = Math.min(0.55, 0.06 + clamped * 0.5);
+            ctx.fillText(RAMP[idx], px, py);
         }
+    }
+    ctx.globalAlpha = 1;
+}
 
-        // Apply inherent movement
-        this.x += this.directionX * this.weight * 0.5; // Apply inherent velocity (scaled by weight)
-        this.y += this.directionY * this.weight * 0.5;
+function drawMatrix() {
+    ctx.fillStyle = '#00ff70';
+    for (let i = 0; i < cols; i++) {
+        const ch = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
+        ctx.globalAlpha = 0.8;
+        ctx.fillText(ch, i * CELL, Math.floor(drops[i]) * CELL);
+        ctx.globalAlpha = 0.3;
+        ctx.fillText(ch, i * CELL, (Math.floor(drops[i]) - 1) * CELL);
+        drops[i] += 0.4 + Math.random() * 0.4;
+        if (drops[i] * CELL > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    }
+    ctx.globalAlpha = 1;
+}
 
-        // --- Mouse Interaction ---
-        let dxMouse = mouse.x - this.x;
-        let dyMouse = mouse.y - this.y;
-        let distanceMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-
-        // Check if mouse is within radius
-        if (distanceMouse < mouse.radius && mouse.x != null) { // Check mouse.x != null to avoid NaN issues on mouseout
-            let forceDirectionX = dxMouse / distanceMouse;
-            let forceDirectionY = dyMouse / distanceMouse;
-
-            // Calculate repulsion force - stronger closer to mouse
-            let maxDistance = mouse.radius;
-            let force = (maxDistance - distanceMouse) / maxDistance; // Force is 0 at radius edge, 1 at center
-
-            let repulsionX = forceDirectionX * force * this.weight * 5; // Increased repulsion strength
-            let repulsionY = forceDirectionY * force * this.weight * 5;
-
-            // Apply repulsion force (move away from mouse)
-            this.x -= repulsionX;
-            this.y -= repulsionY;
-
-            // Slightly dampen inherent velocity when repelled to prevent excessive speed
-            //  this.directionX *= 0.98;
-            //  this.directionY *= 0.98;
-
-        }
-        // --- End Mouse Interaction ---
-
-
-        // Ensure particles don't get stuck out of bounds after repulsion/bounce
-        if (this.x - this.size < 0) { this.x = this.size; this.directionX *= -1; }
-        if (this.x + this.size > canvas.width) { this.x = canvas.width - this.size; this.directionX *= -1; }
-        if (this.y - this.size < 0) { this.y = this.size; this.directionY *= -1; }
-        if (this.y + this.size > canvas.height) { this.y = canvas.height - this.size; this.directionY *= -1; }
-
-
-        this.draw();
+function stepField() {
+    t += 0.016;
+    for (let i = trail.length - 1; i >= 0; i--) {
+        trail[i].life -= 0.04;
+        if (trail[i].life <= 0) trail.splice(i, 1);
+    }
+    for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].r += 6;
+        ripples[i].life -= 0.012;
+        if (ripples[i].life <= 0) ripples.splice(i, 1);
     }
 }
 
-// Initialization function
-function init() {
-    particlesArray = [];
-    let numberOfParticles = (canvas.height * canvas.width) / 9000; // Adjust density
-    for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 2) + 1; // Particle size
-        let x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2); // Use canvas.width/height
-        let y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
-        // Get color from CSS variable
-        const computedStyle = getComputedStyle(document.documentElement);
-        // Use the CSS variable directly. The fallback is less critical if CSS is set up correctly.
-        let color = computedStyle.getPropertyValue('--particle-color').trim();
-        let weight = (Math.random() * 1.5) + 0.5; // Random weight for varied movement
-        particlesArray.push(new Particle(x, y, size, color, weight));
-    }
-}
-
-// Animation loop
 function animate() {
     requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-    }
-    connect(); // Draw lines between particles
+    stepField();
+    drawField();
 }
 
-// Draw lines between nearby particles
-function connect() {
-    let opacityValue = 1;
-    for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                         + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-            if (distance < (canvas.width/7) * (canvas.height/7)) { // Adjust connection distance
-                opacityValue = 1 - (distance/20000); // Fade lines with distance
-                if (opacityValue < 0) opacityValue = 0; // Clamp opacity
-                if (opacityValue > 0.3) opacityValue = 0.3; // Max opacity for lines
-                // Get line color from CSS variable
-                const computedStyle = getComputedStyle(document.documentElement);
-                let baseLineColor = computedStyle.getPropertyValue('--particle-line-color').trim();
-
-                // Set the stroke style directly using the color (including alpha) from the CSS variable.
-                // The calculated opacityValue (distance fade) is already factored in above.
-                // We will apply the calculated opacityValue by setting globalAlpha temporarily.
-                // This avoids complex color string parsing.
-                ctx.save(); // Save current context state
-                ctx.globalAlpha = opacityValue; // Apply distance-based opacity fade
-                ctx.strokeStyle = baseLineColor;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath();
-                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                ctx.stroke();
-                ctx.restore(); // Restore context state (including globalAlpha)
-            }
-        }
-    }
-}
-
-
-// Resize event
-// Resize event
 let resizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        canvas.width = innerWidth;
-        canvas.height = innerHeight;
-        mouse.radius = ((canvas.height/80) * (canvas.height/80)); // Adjust interaction radius on resize
-        init(); // Reinitialize particles on resize
+        resizeField();
+        init();
     }, 100);
 });
 
-// Reset mouse position when mouse leaves window
-window.addEventListener('mouseout', () => {
-    mouse.x = undefined;
-    mouse.y = undefined;
-});
-
-// Start animation
+resizeField();
 init();
-animate();
+if (reduceMotion) {
+    // one calm, static frame — no animation
+    drawField();
+} else {
+    animate();
+}
