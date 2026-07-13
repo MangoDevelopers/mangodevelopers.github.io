@@ -249,14 +249,113 @@
             font-weight: 600;
         }
 
+        /* Bevel-style footer card */
         footer {
-            text-align: center;
-            color: var(--ink-60);
-            font-size: .875rem;
             padding: 0 0 2rem;
         }
 
-        footer a {
+        .foot-card {
+            background: var(--white);
+            border-radius: 2rem;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            .foot-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .foot-logo {
+            font-family: var(--heading);
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: -.01em;
+        }
+
+        .foot-card .about {
+            color: var(--ink-60);
+            font-size: .9375rem;
+            max-width: 18rem;
+            margin-top: .75rem;
+        }
+
+        .foot-copy {
+            color: var(--ink-60);
+            font-size: .875rem;
+            margin-top: 1.25rem;
+        }
+
+        .foot-card h4 {
+            font-size: .875rem;
+            font-weight: 500;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--ink-60);
+            margin-bottom: 1rem;
+        }
+
+        .foot-card .col a {
+            display: block;
+            color: var(--ink);
+            text-decoration: none;
+            font-size: .9375rem;
+            margin-bottom: .65rem;
+            transition: color .15s;
+        }
+
+        .foot-card .col a:hover {
+            color: var(--ink-60);
+        }
+
+        .foot-bottom {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.75rem;
+            border-top: 1px solid #1f202514;
+        }
+
+        .foot-social {
+            display: flex;
+            gap: .9rem;
+        }
+
+        .foot-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--white);
+            transition: transform .15s, opacity .2s;
+        }
+
+        .foot-social a:hover {
+            opacity: .8;
+            transform: translateY(-2px);
+        }
+
+        .foot-social svg {
+            width: 1.15rem;
+            height: 1.15rem;
+        }
+
+        .built-with {
+            color: var(--ink-60);
+            font-size: .9375rem;
+        }
+
+        .built-with a {
             color: var(--ink);
             text-decoration: none;
             font-weight: 600;
@@ -344,8 +443,55 @@
     </main>
 
     <footer>
-        <div class="container">© <span id="year">2026</span> Mango Developers · <a
-                href="/">mangodevelopers.com</a></div>
+        <div class="container">
+            <div class="foot-card" data-animate>
+                <div>
+                    <div class="foot-logo">Mango Developers</div>
+                    <p class="about">A passionate group of software developers creating awesome stuff.</p>
+                    <p class="foot-copy">© Mango Developers <span id="year">2026</span></p>
+                </div>
+                <div class="col">
+                    <h4>Apps</h4>
+                    <a href="/apps/vast-browser/">VastBrowser</a>
+                    <a href="https://github.com/MangoDevelopers/vast-browser-release/releases" target="_blank"
+                        rel="noopener noreferrer">Release notes</a>
+                </div>
+                <div class="col">
+                    <h4>Company</h4>
+                    <a href="/">mangodevelopers.com</a>
+                    <a href="https://github.com/mangodevelopers" target="_blank" rel="noopener noreferrer">GitHub</a>
+                </div>
+                <div class="foot-bottom">
+                    <div class="foot-social">
+                        <a href="https://github.com/mangodevelopers" target="_blank" rel="noopener noreferrer"
+                            aria-label="GitHub" title="GitHub">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.53 11.53 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
+                            </svg>
+                        </a>
+                        <a href="https://instagram.com/mangodevs" target="_blank" rel="noopener noreferrer"
+                            aria-label="Instagram" title="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                aria-hidden="true">
+                                <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+                                <circle cx="12" cy="12" r="4.4" />
+                                <circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none" />
+                            </svg>
+                        </a>
+                        <a href="https://twitter.com/mangodevs" target="_blank" rel="noopener noreferrer"
+                            aria-label="Twitter" title="Twitter">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M18.24 2.25h3.31l-7.23 8.26 8.51 11.24h-6.66l-5.22-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <p class="built-with">Built with ❤️ by <a href="https://mangodevelopers.com">mangodevelopers.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script>

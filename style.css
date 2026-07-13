@@ -540,3 +540,23 @@ body.light-theme .apps-button:hover {
   border-color: #0097a7;
   color: #0097a7;
 }
+
+/* Built-with-love credit line */
+.built-with {
+  margin-top: 24px;
+  text-align: center;
+  width: 100%;
+  font-size: 0.85em;
+  color: var(--text-color);
+  opacity: 0.75;
+}
+
+.built-with a {
+  color: #00bcd4;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.built-with a:hover {
+  text-decoration: underline;
+}
