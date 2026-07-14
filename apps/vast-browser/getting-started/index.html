@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Learn how to use VastBrowser on your Android TV or Fire TV — cursor, scrolling, address bar, ad blocking and more.">
+    <title>Getting Started — VastBrowser</title>
+
+    <!-- Google tag (gtag.js) — same property as the rest of mangodevelopers.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVE8EH4YDB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-QVE8EH4YDB');
+    </script>
+
+    <style>
+        /* TV-first: dark theme matching the browser chrome, large type,
+           generous spacing, focus-visible states for cursor/D-pad use. */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #1a1a2e;
+            color: #f1f1f1;
+            font-family: -apple-system, Roboto, "Segoe UI", sans-serif;
+            font-size: 20px;
+            line-height: 1.55;
+        }
+
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 5vw 64px; }
+
+        header { text-align: center; margin-bottom: 40px; }
+
+        header .logo {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00bcd4, #2196f3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        header p { color: #8e8e93; font-size: 22px; margin-top: 8px; }
+
+        .card {
+            background: #16213e;
+            border: 1px solid #2c2c4a;
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 { font-size: 26px; margin-bottom: 14px; }
+        .card h2 .emoji { margin-right: 10px; }
+
+        .key {
+            display: inline-block;
+            background: #0f3460;
+            border: 1px solid #4a4a6a;
+            border-bottom-width: 3px;
+            border-radius: 8px;
+            padding: 2px 14px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        ul { list-style: none; }
+        li { margin-bottom: 12px; padding-left: 4px; }
+
+        .tip {
+            background: #0f3460;
+            border-left: 4px solid #9d4edd;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            font-size: 18px;
+        }
+
+        .buttons { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+
+        a.button {
+            display: inline-block;
+            background: #533483;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 20px;
+            padding: 14px 26px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+
+        a.button:hover, a.button:focus {
+            background: #9d4edd;
+            border-color: #fff;
+            outline: none;
+        }
+
+        footer { text-align: center; color: #8e8e93; font-size: 16px; margin-top: 40px; }
+        footer a { color: #9d4edd; }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <div class="logo">VastBrowser</div>
+            <p>Welcome! Here's everything you need to browse the web with your remote.</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="emoji">🎯</span>Move the cursor</h2>
+            <ul>
+                <li>Use the <span class="key">D-pad</span> to move the on-screen cursor. Hold a direction —
+                    the cursor starts precise and speeds up the longer you hold.</li>
+                <li>Press <span class="key">OK</span> to click whatever is under the cursor.</li>
+                <li>Push the cursor past the edge of the screen and the page scrolls with it.</li>
+            </ul>
+            <div class="tip">💡 Adjust the top speed in Settings → Cursor &amp; Scrolling.</div>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">📜</span>Scroll pages</h2>
+            <ul>
+                <li><b>Hold</b> <span class="key">OK</span> for about a second to enter <b>scroll mode</b> —
+                    the cursor becomes a disk and the D-pad now scrolls the page smoothly.</li>
+                <li>Hold <span class="key">OK</span> again (or press <span class="key">Back</span>) to
+                    return to the normal cursor.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">🔍</span>Address bar &amp; search</h2>
+            <ul>
+                <li>Press <span class="key">▲ Up</span> three times quickly to open the address bar.
+                    (The <span class="key">Menu</span> button works too.)</li>
+                <li>Type a web address, or just type words to search the web.</li>
+                <li>Press <span class="key">▼ Down</span> three times to hide the bar again.</li>
+                <li>The 🏠 button takes you home — <b>long-press it</b> on any page to make that page
+                    your new home page.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">🛡️</span>Ads &amp; trackers are blocked for you</h2>
+            <ul>
+                <li>VastBrowser blocks ads, analytics and social trackers at the network level —
+                    before they even load. It's on by default.</li>
+                <li>See the running totals (and switch it off if you want) in
+                    Settings → Ad &amp; Tracker Blocking.</li>
+            </ul>
+            <div class="buttons">
+                <a class="button" href="../adblocking-demo/">Try the live ad-block test →</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">🎬</span>Media keys</h2>
+            <ul>
+                <li><span class="key">Play/Pause</span> controls any video on the page.</li>
+                <li><span class="key">⏩</span> / <span class="key">⏪</span> jump 10 seconds forward or back.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">🔄</span>Stay up to date</h2>
+            <ul>
+                <li>VastBrowser checks for updates automatically and shows a dot on the ⚙️ settings
+                    button when a new version is ready.</li>
+                <li>Install updates in Settings → About &amp; Updates, no app store needed.</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Exit the browser any time by pressing <span class="key">Back</span> three times.</p>
+            <p style="margin-top:10px">VastBrowser by
+                <a href="https://mangodevelopers.com/apps/vast-browser/">Mango Developers</a> · free &amp; open
+            </p>
+        </footer>
+    </div>
+</body>
+
+</html>

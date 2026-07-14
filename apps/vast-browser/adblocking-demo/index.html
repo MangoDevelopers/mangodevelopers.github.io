@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <meta name="description" content="Live test page for VastBrowser's ad and tracker blocking.">
+    <title>Ad-Blocking Demo — VastBrowser</title>
+    <style>
+        /* TV-friendly: dark background, large type, high contrast */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #1a1a2e;
+            color: #f1f1f1;
+            font-family: -apple-system, Roboto, "Segoe UI", sans-serif;
+            font-size: 20px;
+            padding: 40px 5vw;
+        }
+
+        h1 { font-size: 34px; margin-bottom: 8px; }
+        .subtitle { color: #8e8e93; margin-bottom: 28px; }
+
+        .scoreboard {
+            background: #16213e;
+            border: 2px solid #533483;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .scoreboard .big {
+            font-size: 44px;
+            font-weight: 700;
+            color: #9d4edd;
+        }
+
+        .scoreboard .verdict { margin-top: 8px; font-size: 22px; }
+        .verdict.good { color: #4ade80; }
+        .verdict.bad { color: #f87171; }
+
+        h2 { font-size: 24px; margin: 28px 0 12px; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #33334d;
+            vertical-align: top;
+        }
+
+        td.status { width: 170px; text-align: right; font-weight: 700; white-space: nowrap; }
+        .status.blocked { color: #4ade80; }
+        .status.loaded { color: #f87171; }
+        .status.pending { color: #8e8e93; }
+        .test-name { font-weight: 600; }
+        .test-detail { color: #8e8e93; font-size: 15px; }
+
+        /* Fake ad units for the cosmetic-filtering tests. If cosmetic
+           filtering works, these are display:none and the checker reports
+           them hidden. */
+        .fake-ads { display: flex; gap: 16px; margin: 12px 0 4px; min-height: 0; }
+
+        .fake-ads > div {
+            flex: 1;
+            background: repeating-linear-gradient(45deg, #7a2020, #7a2020 12px, #5a1616 12px, #5a1616 24px);
+            border: 2px dashed #f87171;
+            border-radius: 8px;
+            padding: 26px 10px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        footer { margin-top: 40px; color: #8e8e93; font-size: 15px; }
+        a { color: #9d4edd; }
+    </style>
+</head>
+
+<body>
+    <h1>🛡️ Ad-Blocking Demo</h1>
+    <p class="subtitle">This page tries to load real ad &amp; tracker resources and shows what your browser stopped.
+        With VastBrowser's blocking enabled, everything below should be blocked or hidden.</p>
+
+    <div class="scoreboard">
+        <div class="big" id="score">…</div>
+        <div class="verdict pending" id="verdict">Running tests…</div>
+    </div>
+
+    <h2>Network requests (blocked before they leave your device)</h2>
+    <table id="network-tests"></table>
+
+    <h2>Ad containers (hidden by cosmetic filtering)</h2>
+    <div class="fake-ads">
+        <div class="ad-banner">FAKE AD — .ad-banner</div>
+        <div class="adsbygoogle">FAKE AD — .adsbygoogle</div>
+        <div id="google_ads_frame">FAKE AD — #google_ads_frame</div>
+    </div>
+    <table id="cosmetic-tests"></table>
+
+    <footer>
+        If a row says LOADED, that resource reached your device. Toggle blocking in
+        VastBrowser Settings → Ad &amp; Tracker Blocking and reload to compare.
+        <br>Part of <a href="../index.html">VastBrowser</a> by Mango Developers.
+    </footer>
+
+    <script>
+        (function () {
+            var WAIT_MS = 5000;
+            var results = {};
+            var tests = [];
+
+            function row(tableId, id, name, detail) {
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<td><div class="test-name">' + name + '</div>' +
+                    '<div class="test-detail">' + detail + '</div></td>' +
+                    '<td class="status pending" id="status-' + id + '">TESTING…</td>';
+                document.getElementById(tableId).appendChild(tr);
+            }
+
+            function setResult(id, blocked) {
+                if (id in results) return;
+                results[id] = blocked;
+                var cell = document.getElementById('status-' + id);
+                cell.textContent = blocked ? '✅ BLOCKED' : '❌ LOADED';
+                cell.className = 'status ' + (blocked ? 'blocked' : 'loaded');
+                updateScore();
+            }
+
+            function updateScore() {
+                var done = Object.keys(results).length;
+                var blocked = 0;
+                for (var k in results) { if (results[k]) blocked++; }
+                document.getElementById('score').textContent = blocked + ' / ' + tests.length + ' blocked';
+                if (done === tests.length) {
+                    var verdict = document.getElementById('verdict');
+                    if (blocked === tests.length) {
+                        verdict.textContent = 'Full protection — every ad and tracker was stopped.';
+                        verdict.className = 'verdict good';
+                    } else if (blocked > 0) {
+                        verdict.textContent = 'Partial protection — some resources got through.';
+                        verdict.className = 'verdict bad';
+                    } else {
+                        verdict.textContent = 'No protection detected — is blocking enabled?';
+                        verdict.className = 'verdict bad';
+                    }
+                }
+            }
+
+            /* --- Script tests: load a real tracker/ad script, then check for
+                   the global it defines. Blocked requests yield an empty
+                   response, so the global never appears. --- */
+            function scriptTest(id, name, url, probe) {
+                tests.push(id);
+                row('network-tests', id, name, url);
+                var s = document.createElement('script');
+                s.src = url;
+                document.head.appendChild(s);
+                setTimeout(function () { setResult(id, !probe()); }, WAIT_MS);
+            }
+
+            /* --- Image beacon test: a blocked beacon never returns valid
+                   image data, so onload never fires. --- */
+            function beaconTest(id, name, url) {
+                tests.push(id);
+                row('network-tests', id, name, url);
+                var img = new Image();
+                var loaded = false;
+                img.onload = function () { loaded = true; setResult(id, false); };
+                img.src = url;
+                setTimeout(function () { if (!loaded) setResult(id, true); }, WAIT_MS);
+            }
+
+            /* --- Cosmetic test: was the fake ad element hidden? --- */
+            function cosmeticTest(id, name, selector) {
+                tests.push(id);
+                row('cosmetic-tests', id, name, 'selector: ' + selector);
+                setTimeout(function () {
+                    var el = document.querySelector(selector);
+                    var hidden = !el || window.getComputedStyle(el).display === 'none';
+                    setResult(id, hidden);
+                }, WAIT_MS);
+            }
+
+            scriptTest('ga', 'Google Analytics (analytics)',
+                'https://www.google-analytics.com/analytics.js',
+                function () { return typeof window.ga === 'function'; });
+
+            scriptTest('gpt', 'Google Publisher Tags / DoubleClick (advertising)',
+                'https://securepubads.g.doubleclick.net/tag/js/gpt.js',
+                function () { return !!(window.googletag && window.googletag.apiReady); });
+
+            scriptTest('adsense', 'Google AdSense (advertising)',
+                'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+                function () { return !!(window.adsbygoogle && window.adsbygoogle.loaded); });
+
+            scriptTest('fbpixel', 'Facebook Pixel (social)',
+                'https://connect.facebook.net/en_US/fbevents.js',
+                function () { return typeof window.fbq === 'function'; });
+
+            scriptTest('hotjar', 'Hotjar (analytics / fingerprinting)',
+                'https://static.hotjar.com/c/hotjar-104811.js?sv=6',
+                function () { return typeof window.hj === 'function'; });
+
+            beaconTest('gabeacon', 'Google Analytics beacon (analytics)',
+                'https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-000000-1&cid=demo');
+
+            beaconTest('fbbeacon', 'Facebook tracking pixel (social)',
+                'https://www.facebook.com/tr?id=000000000000000&ev=PageView&noscript=1');
+
+            cosmeticTest('cos1', 'Banner ad container', '.ad-banner');
+            cosmeticTest('cos2', 'AdSense ad unit', '.adsbygoogle');
+            cosmeticTest('cos3', 'Google ads iframe container', '#google_ads_frame');
+        })();
+    </script>
+</body>
+
+</html>
