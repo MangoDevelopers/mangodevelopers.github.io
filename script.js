@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
        Intro sequence types itself, then hands over a live prompt.
        ============================================================ */
 
-    const PROMPT = 'mango@mangodevelopers:~$ ';
+    const PROMPT = 'visitor@mangodevelopers > ';
     const EMAIL = 'admin@mangodevelopers.com';
 
     const introLines = [
@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
 
-const RAMP = ' ·.:-=+*#%@';
+const RAMP = ' ·.:-=+*#%<';
 const CELL = 14;
 let cols = 0, rows = 0;
 let fieldColor = '#40E0D0';
