@@ -10,12 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
        Intro sequence types itself, then hands over a live prompt.
        ============================================================ */
 
-    const PROMPT = 'visitor@mangodevelopers > ';
+    const PROMPT = 'visitor@mango-developers > ';
     const EMAIL = 'admin@mangodevelopers.com';
 
     const introLines = [
-        { text: '\n> whoami', type: 'command', delayAfter: 400 },
-        { text: '\nmango_developers\n', type: 'output', delayAfter: 200 },
+        { text: '\n> hostname', type: 'command', delayAfter: 400 },
+        { text: '\nmango-developers\n', type: 'output', delayAfter: 200 },
         { text: '> cat README.md', type: 'command', delayAfter: 400 },
         { text: '\n# Welcome to Mango Developers!\n', type: 'output', delayAfter: 50 },
         { text: 'We are a passionate group of software developers creating awesome stuff.\n', type: 'output', delayAfter: 50 },
